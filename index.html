@@ -2,11 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>KLEPON-GO</title>
 
@@ -35,24 +31,18 @@
 
 :root{
 
-  --pandan-dark:#1B4332;
-  --pandan:#2D6A4F;
-  --pandan-light:#52B788;
+  --dark:#1B4332;
+  --green:#2D6A4F;
+  --light:#52B788;
 
-  --coconut:#F8F9FA;
-  --coconut-soft:#E9F5EC;
-
-  --gula:#9C6644;
-  --gula-dark:#7F5539;
-
-  --text-soft:#D8F3DC;
-  --text-muted:#B7D5C4;
+  --soft:#D8F3DC;
+  --muted:#B7D5C4;
 
 }
 
 body{
   overflow:hidden;
-  background:var(--pandan-dark);
+  background:var(--dark);
   color:white;
 }
 
@@ -75,9 +65,9 @@ body{
   background:
     linear-gradient(
       135deg,
-      var(--pandan-dark),
-      var(--pandan),
-      var(--gula-dark)
+      #1B4332,
+      #2D6A4F,
+      #081C15
     );
 
 }
@@ -120,7 +110,7 @@ body{
   width:110px;
   height:110px;
 
-  border-radius:30px;
+  border-radius:28px;
 
   background:
     rgba(255,255,255,0.08);
@@ -133,8 +123,6 @@ body{
   justify-content:center;
 
   margin-bottom:24px;
-
-  backdrop-filter:blur(10px);
 
 }
 
@@ -193,8 +181,9 @@ body{
   background:
     linear-gradient(
       90deg,
-      #95D5B2,
-      #9C6644
+      #4ecdc4,
+      #5dade2,
+      #a569bd
     );
 
   transition:width .4s ease;
@@ -207,9 +196,9 @@ body{
 
   text-align:center;
 
-  color:#E9F5EC;
-
   font-size:13px;
+
+  color:#E9F5EC;
 
 }
 
@@ -245,8 +234,6 @@ body{
   align-items:center;
   justify-content:center;
 
-  backdrop-filter:blur(10px);
-
 }
 
 /* =========================
@@ -259,7 +246,7 @@ body{
 }
 
 /* =========================
-   TOP FILTER
+   TOP UI
 ========================= */
 
 .top-ui{
@@ -370,7 +357,7 @@ body{
 }
 
 /* =========================
-   FLOAT BUTTONS
+   FLOATING BUTTONS
 ========================= */
 
 .floating-buttons{
@@ -430,7 +417,7 @@ body{
 
   z-index:9999;
 
-  max-width:160px;
+  max-width:170px;
 
   padding:12px;
 
@@ -482,7 +469,7 @@ body{
 }
 
 /* =========================
-   MINI BOTTOM SHEET
+   MINI SHEET
 ========================= */
 
 .bottom-sheet{
@@ -504,11 +491,11 @@ body{
 
   padding:14px;
 
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.35);
-
   border:
     1px solid rgba(255,255,255,0.06);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.35);
 
 }
 
@@ -518,16 +505,12 @@ body{
   align-items:center;
   justify-content:space-between;
 
-  margin-bottom:12px;
-
 }
 
 .sheet-title{
 
   font-size:16px;
   font-weight:800;
-
-  color:#F8F9FA;
 
 }
 
@@ -549,6 +532,8 @@ body{
 
 .sheet-content{
 
+  margin-top:12px;
+
   overflow:hidden;
 
   max-height:400px;
@@ -560,7 +545,6 @@ body{
 .sheet-content.hide{
 
   max-height:0;
-
   margin-top:0;
 
 }
@@ -600,8 +584,6 @@ body{
   font-size:13px;
   font-weight:700;
 
-  color:white;
-
 }
 
 .direction-btn{
@@ -620,7 +602,7 @@ body{
     linear-gradient(
       135deg,
       #52B788,
-      #9C6644
+      #40916C
     );
 
   color:white;
@@ -639,6 +621,31 @@ body{
   font-size:11px;
 
   color:#B7D5C4;
+
+}
+
+/* =========================
+   LABEL
+========================= */
+
+.polygon-label{
+
+  background:
+    rgba(27,67,50,0.92);
+
+  border:none;
+
+  color:white;
+
+  font-size:10px;
+  font-weight:700;
+
+  padding:4px 8px;
+
+  border-radius:8px;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.25);
 
 }
 
@@ -680,9 +687,7 @@ body{
 
 <body>
 
-<!-- =========================
-     SPLASH
-========================= -->
+<!-- SPLASH -->
 
 <div id="splashScreen">
 
@@ -690,7 +695,6 @@ body{
 
   <div class="logo-top">
 
-    <!-- GANTI -->
     <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
 
   </div>
@@ -730,7 +734,6 @@ body{
 
   <div class="logo-bottom">
 
-    <!-- GANTI -->
     <img
       src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_BPS_%28indonesia%29.svg"
       width="50"
@@ -742,9 +745,7 @@ body{
 
 <div id="map"></div>
 
-<!-- =========================
-     TOP UI
-========================= -->
+<!-- TOP UI -->
 
 <div class="top-ui">
 
@@ -788,9 +789,7 @@ body{
 
 </div>
 
-<!-- =========================
-     FLOAT BUTTONS
-========================= -->
+<!-- FLOAT -->
 
 <div class="floating-buttons">
 
@@ -810,23 +809,22 @@ body{
 
 </div>
 
-<!-- =========================
-     LEGEND
-========================= -->
+<!-- LEGEND -->
 
 <div class="legend">
 
-  <div class="legend-title">
-    Warna Wilayah
+  <div
+    class="legend-title"
+    id="legendTitle"
+  >
+    Warna Kecamatan
   </div>
 
   <div id="legendItems"></div>
 
 </div>
 
-<!-- =========================
-     MINI BOTTOM SHEET
-========================= -->
+<!-- BOTTOM SHEET -->
 
 <div class="bottom-sheet">
 
@@ -984,7 +982,8 @@ const splashInterval = setInterval(() => {
 
   document
     .getElementById("loadingText")
-    .innerText = loadingSteps[stepIndex];
+    .innerText =
+      loadingSteps[stepIndex];
 
   if(progress >= 100){
 
@@ -1026,19 +1025,16 @@ let selectedCenter = null;
 
 const palette = [
 
-  "#95D5B2",
-  "#74C69D",
-  "#52B788",
-  "#B7E4C7",
-
-  "#FFB4A2",
-  "#E5989B",
-
-  "#B8C0FF",
-  "#CDB4DB",
-
-  "#FFD166",
-  "#F4A261"
+  "#ff6b6b",
+  "#4ecdc4",
+  "#ffe66d",
+  "#5dade2",
+  "#a569bd",
+  "#58d68d",
+  "#f5b041",
+  "#ec7063",
+  "#48c9b0",
+  "#af7ac5"
 
 ];
 
@@ -1059,7 +1055,9 @@ fetch('final_subsls_6171_2025-1.geojson')
 
   populateKecamatan();
 
-  renderGeoJSON(allData.features);
+  renderGeoJSON(
+    allData.features
+  );
 
 });
 
@@ -1096,6 +1094,16 @@ function renderGeoJSON(features){
 
   }
 
+  const selectedKec =
+    document
+    .getElementById("kecamatanFilter")
+    .value;
+
+  const selectedKel =
+    document
+    .getElementById("kelurahanFilter")
+    .value;
+
   geojsonLayer = L.geoJSON(features,{
 
     style:feature => {
@@ -1103,27 +1111,32 @@ function renderGeoJSON(features){
       const props =
         feature.properties;
 
-      const selectedKec =
-        document
-        .getElementById("kecamatanFilter")
-        .value;
-
       let fill;
 
-      if(selectedKec){
+      /* =========================
+         GLOBAL
+      ========================= */
 
-        fill =
-          getColor(
-            kelurahanColorMap,
-            props.nmdesa
-          );
-
-      }else{
+      if(!selectedKec){
 
         fill =
           getColor(
             kecamatanColorMap,
             props.nmkec
+          );
+
+      }
+
+      /* =========================
+         KECAMATAN MODE
+      ========================= */
+
+      else{
+
+        fill =
+          getColor(
+            kelurahanColorMap,
+            props.nmdesa
           );
 
       }
@@ -1136,7 +1149,7 @@ function renderGeoJSON(features){
 
         fillColor:fill,
 
-        fillOpacity:0.45
+        fillOpacity:0.55
 
       };
 
@@ -1152,6 +1165,26 @@ function renderGeoJSON(features){
         );
 
       });
+
+      /* =========================
+         SHOW LABEL
+      ========================= */
+
+      if(selectedKel){
+
+        layer.bindTooltip(
+
+          feature.properties.nmsls || "-",
+
+          {
+            permanent:true,
+            direction:"center",
+            className:"polygon-label"
+          }
+
+        );
+
+      }
 
     }
 
@@ -1208,7 +1241,7 @@ function selectPolygon(feature,layer){
 }
 
 /* =========================
-   POPULATE KECAMATAN
+   POPULATE KEC
 ========================= */
 
 function populateKecamatan(){
@@ -1254,6 +1287,15 @@ document
   const kecamatan =
     this.value;
 
+  /* RESET COLOR MAP */
+
+  Object.keys(kelurahanColorMap)
+  .forEach(key => {
+
+    delete kelurahanColorMap[key];
+
+  });
+
   const kelSelect =
     document
     .getElementById("kelurahanFilter");
@@ -1264,7 +1306,14 @@ document
     </option>
   `;
 
+  /* GLOBAL */
+
   if(!kecamatan){
+
+    document
+      .getElementById("legendTitle")
+      .innerText =
+        "Warna Kecamatan";
 
     renderGeoJSON(
       allData.features
@@ -1279,6 +1328,8 @@ document
 
   }
 
+  /* FILTER */
+
   const filtered =
     allData.features.filter(f =>
 
@@ -1287,6 +1338,11 @@ document
     );
 
   renderGeoJSON(filtered);
+
+  document
+    .getElementById("legendTitle")
+    .innerText =
+      "Warna Kelurahan";
 
   const temp =
     L.geoJSON(filtered);
@@ -1338,6 +1394,8 @@ document
   const kelurahan =
     this.value;
 
+  /* ONLY KECAMATAN */
+
   if(!kelurahan){
 
     const filtered =
@@ -1352,6 +1410,8 @@ document
     return;
 
   }
+
+  /* FILTER */
 
   const filtered =
     allData.features.filter(f =>
@@ -1483,6 +1543,11 @@ function resetFilters(){
     .getElementById("searchInput")
     .value = "";
 
+  document
+    .getElementById("legendTitle")
+    .innerText =
+      "Warna Kecamatan";
+
   renderGeoJSON(
     allData.features
   );
@@ -1553,17 +1618,9 @@ function updateLegend(features){
     let key;
     let color;
 
-    if(selectedKec){
+    /* GLOBAL */
 
-      key = props.nmdesa;
-
-      color =
-        getColor(
-          kelurahanColorMap,
-          props.nmdesa
-        );
-
-    }else{
+    if(!selectedKec){
 
       key = props.nmkec;
 
@@ -1571,6 +1628,20 @@ function updateLegend(features){
         getColor(
           kecamatanColorMap,
           props.nmkec
+        );
+
+    }
+
+    /* KEC MODE */
+
+    else{
+
+      key = props.nmdesa;
+
+      color =
+        getColor(
+          kelurahanColorMap,
+          props.nmdesa
         );
 
     }
