@@ -285,6 +285,12 @@ SEARCH
 
 }
 
+.search-box i{
+
+  color:#B7D5C4;
+
+}
+
 .search-box input{
 
   flex:1;
@@ -748,6 +754,8 @@ PERSON MARKER
   align-items:center;
   justify-content:center;
 
+  transition:transform .2s linear;
+
 }
 
 .person-marker i{
@@ -760,6 +768,10 @@ PERSON MARKER
     0 0 12px rgba(255,255,255,0.8);
 
 }
+
+/* =========================
+LEAFLET
+========================= */
 
 .leaflet-control-zoom{
   display:none !important;
@@ -823,6 +835,7 @@ PERSON MARKER
   id="areaPopup"
   class="area-popup"
 >
+
   <div class="area-popup-sub">
     Kamu Memasuki
   </div>
@@ -840,6 +853,7 @@ PERSON MARKER
   >
     Pontianak Selatan
   </div>
+
 </div>
 
 <!-- TOP UI -->
@@ -899,7 +913,7 @@ PERSON MARKER
 
   <button
     class="float-btn"
-    onclick="locateUser()"
+    onclick="recenterUser()"
   >
     <i class="fa-solid fa-location-crosshairs"></i>
   </button>
@@ -1066,10 +1080,12 @@ let allData;
 let geojsonLayer;
 let selectedCenter = null;
 
-let watchId = null;
 let userMarker = null;
 let currentHeading = 0;
 let currentArea = null;
+
+let currentUserLat = null;
+let currentUserLng = null;
 
 const palette = [
 
@@ -1169,7 +1185,134 @@ fetch('final_subsls_6171_2025-1.geojson')
     allData.features
   );
 
+  initializeGPS();
+
 });
+
+/* =========================
+INITIALIZE GPS
+========================= */
+
+function initializeGPS(){
+
+  navigator.geolocation.watchPosition(
+
+    position => {
+
+      const lat =
+        position.coords.latitude;
+
+      const lng =
+        position.coords.longitude;
+
+      const heading =
+        position.coords.heading;
+
+      currentUserLat = lat;
+      currentUserLng = lng;
+
+      if(heading !== null){
+
+        currentHeading =
+          heading;
+
+      }
+
+      if(!userMarker){
+
+        userMarker =
+          L.marker(
+
+            [lat,lng],
+
+            {
+              icon:personIcon
+            }
+
+          ).addTo(map);
+
+      }
+
+      else{
+
+        userMarker.setLatLng(
+          [lat,lng]
+        );
+
+      }
+
+      setTimeout(() => {
+
+        const markerEl =
+          document.getElementById(
+            "personMarker"
+          );
+
+        if(markerEl){
+
+          markerEl.style.transform =
+            `rotate(${currentHeading}deg)`;
+
+        }
+
+      },50);
+
+      detectCurrentPolygon(
+        lat,
+        lng
+      );
+
+    },
+
+    err => {
+
+      console.log(err);
+
+    },
+
+    {
+
+      enableHighAccuracy:true,
+
+      maximumAge:0,
+
+      timeout:5000
+
+    }
+
+  );
+
+}
+
+/* =========================
+RECENTER USER
+========================= */
+
+function recenterUser(){
+
+  if(
+    currentUserLat &&
+    currentUserLng
+  ){
+
+    map.flyTo(
+
+      [
+        currentUserLat,
+        currentUserLng
+      ],
+
+      17,
+
+      {
+        duration:1.5
+      }
+
+    );
+
+  }
+
+}
 
 /* =========================
 COLOR
@@ -1556,8 +1699,7 @@ document
 
   renderGeoJSON(filtered);
 
-  const temp =
-    [];
+  const temp = [];
 
   filtered.forEach(f => {
 
@@ -1644,107 +1786,6 @@ document
   renderGeoJSON(filtered);
 
 });
-
-/* =========================
-LIVE GPS
-========================= */
-
-function locateUser(){
-
-  if(watchId){
-
-    navigator.geolocation
-    .clearWatch(watchId);
-
-    watchId = null;
-
-    if(userMarker){
-
-      map.removeLayer(userMarker);
-
-      userMarker = null;
-
-    }
-
-    return;
-
-  }
-
-  watchId =
-    navigator.geolocation.watchPosition(
-
-      position => {
-
-        const lat =
-          position.coords.latitude;
-
-        const lng =
-          position.coords.longitude;
-
-        const heading =
-          position.coords.heading;
-
-        if(heading !== null){
-
-          currentHeading =
-            heading;
-
-        }
-
-        if(!userMarker){
-
-          userMarker =
-            L.marker(
-
-              [lat,lng],
-
-              {
-                icon:personIcon
-              }
-
-            ).addTo(map);
-
-        }
-
-        else{
-
-          userMarker.setLatLng(
-            [lat,lng]
-          );
-
-        }
-
-        setTimeout(() => {
-
-          const markerEl =
-            document.getElementById(
-              "personMarker"
-            );
-
-          if(markerEl){
-
-            markerEl.style.transform =
-              `rotate(${currentHeading}deg)`;
-
-          }
-
-        },50);
-
-        map.setView(
-          [lat,lng],
-          17
-        );
-
-        detectCurrentPolygon(
-          lat,
-          lng
-        );
-
-      }
-
-    );
-
-}
 
 /* =========================
 DETECT POLYGON
