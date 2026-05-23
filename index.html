@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8" />
+
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0"
@@ -56,7 +57,7 @@ body{
 }
 
 /* =========================
-   SPLASH SCREEN
+   SPLASH
 ========================= */
 
 #splashScreen{
@@ -131,8 +132,6 @@ body{
   align-items:center;
   justify-content:center;
 
-  z-index:2;
-
   margin-bottom:24px;
 
   backdrop-filter:blur(10px);
@@ -150,8 +149,6 @@ body{
 
   letter-spacing:2px;
 
-  z-index:2;
-
 }
 
 .app-subtitle{
@@ -162,8 +159,6 @@ body{
 
   font-size:14px;
 
-  z-index:2;
-
 }
 
 .loading-container{
@@ -171,8 +166,6 @@ body{
   width:260px;
 
   margin-top:40px;
-
-  z-index:2;
 
 }
 
@@ -266,7 +259,7 @@ body{
 }
 
 /* =========================
-   TOP UI
+   TOP FILTER
 ========================= */
 
 .top-ui{
@@ -345,8 +338,9 @@ body{
 
 .filter-group{
 
-  display:flex;
-  flex-direction:column;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
   gap:10px;
 
 }
@@ -358,7 +352,7 @@ body{
   border:none;
   outline:none;
 
-  padding:15px 16px;
+  padding:14px;
 
   border-radius:18px;
 
@@ -367,7 +361,7 @@ body{
 
   color:white;
 
-  font-size:14px;
+  font-size:13px;
 
 }
 
@@ -376,7 +370,7 @@ body{
 }
 
 /* =========================
-   FLOATING BUTTONS
+   FLOAT BUTTONS
 ========================= */
 
 .floating-buttons{
@@ -392,6 +386,7 @@ body{
 
   display:flex;
   flex-direction:column;
+
   gap:12px;
 
 }
@@ -431,18 +426,18 @@ body{
   position:fixed;
 
   left:14px;
-  bottom:330px;
+  bottom:150px;
 
   z-index:9999;
 
-  max-width:170px;
+  max-width:160px;
 
-  padding:14px;
+  padding:12px;
 
-  border-radius:22px;
+  border-radius:20px;
 
   background:
-    rgba(27,67,50,0.9);
+    rgba(27,67,50,0.88);
 
   backdrop-filter:blur(14px);
 
@@ -453,7 +448,7 @@ body{
 
 .legend-title{
 
-  font-size:13px;
+  font-size:12px;
   font-weight:700;
 
   margin-bottom:10px;
@@ -466,11 +461,12 @@ body{
 
   display:flex;
   align-items:center;
+
   gap:8px;
 
-  margin-bottom:8px;
+  margin-bottom:6px;
 
-  font-size:12px;
+  font-size:11px;
 
   color:#D8F3DC;
 
@@ -486,75 +482,86 @@ body{
 }
 
 /* =========================
-   BOTTOM SHEET
+   MINI BOTTOM SHEET
 ========================= */
 
 .bottom-sheet{
 
   position:fixed;
 
-  left:0;
-  right:0;
-  bottom:0;
+  left:12px;
+  right:12px;
+  bottom:12px;
 
   z-index:9999;
 
   background:
-    rgba(27,67,50,0.96);
+    rgba(27,67,50,0.95);
 
   backdrop-filter:blur(18px);
 
-  border-radius:30px 30px 0 0;
+  border-radius:24px;
 
-  padding:18px;
+  padding:14px;
 
   box-shadow:
-    0 -10px 30px rgba(0,0,0,0.35);
+    0 10px 30px rgba(0,0,0,0.35);
+
+  border:
+    1px solid rgba(255,255,255,0.06);
 
 }
 
-.drag-line{
+.bottom-sheet-header{
 
-  width:60px;
-  height:5px;
-
-  border-radius:999px;
-
-  background:
-    rgba(255,255,255,0.22);
-
-  margin:0 auto 18px;
-
-}
-
-.badge{
-
-  display:inline-flex;
+  display:flex;
   align-items:center;
-  gap:8px;
+  justify-content:space-between;
 
-  padding:8px 14px;
-
-  border-radius:999px;
-
-  background:#52B78822;
-
-  color:#D8F3DC;
-
-  font-size:12px;
-
-  margin-bottom:14px;
+  margin-bottom:12px;
 
 }
 
 .sheet-title{
 
-  font-size:22px;
+  font-size:16px;
   font-weight:800;
 
-  margin-bottom:16px;
-
   color:#F8F9FA;
+
+}
+
+.toggle-sheet{
+
+  width:34px;
+  height:34px;
+
+  border:none;
+
+  border-radius:12px;
+
+  background:
+    rgba(255,255,255,0.08);
+
+  color:white;
+
+}
+
+.sheet-content{
+
+  overflow:hidden;
+
+  max-height:400px;
+
+  transition:.3s ease;
+
+}
+
+.sheet-content.hide{
+
+  max-height:0;
+
+  margin-top:0;
 
 }
 
@@ -562,37 +569,35 @@ body{
 
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
+
+  gap:10px;
 
 }
 
 .info-card{
 
-  padding:14px;
+  padding:12px;
 
-  border-radius:18px;
+  border-radius:16px;
 
   background:
     rgba(255,255,255,0.06);
-
-  border:
-    1px solid rgba(255,255,255,0.04);
 
 }
 
 .info-label{
 
-  font-size:11px;
+  font-size:10px;
 
   color:#B7D5C4;
 
-  margin-bottom:5px;
+  margin-bottom:4px;
 
 }
 
 .info-value{
 
-  font-size:14px;
+  font-size:13px;
   font-weight:700;
 
   color:white;
@@ -601,15 +606,15 @@ body{
 
 .direction-btn{
 
-  margin-top:16px;
+  margin-top:12px;
 
   width:100%;
 
   border:none;
 
-  padding:16px;
+  padding:14px;
 
-  border-radius:20px;
+  border-radius:18px;
 
   background:
     linear-gradient(
@@ -620,11 +625,20 @@ body{
 
   color:white;
 
-  font-size:15px;
+  font-size:14px;
   font-weight:800;
 
-  box-shadow:
-    0 10px 24px rgba(0,0,0,0.2);
+}
+
+.creator-card{
+
+  margin-top:10px;
+
+  text-align:center;
+
+  font-size:11px;
+
+  color:#B7D5C4;
 
 }
 
@@ -661,26 +675,6 @@ body{
   background:#1B4332;
 }
 
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:480px){
-
-  .legend{
-
-    bottom:300px;
-
-    max-width:150px;
-
-  }
-
-  .sheet-title{
-    font-size:20px;
-  }
-
-}
-
 </style>
 </head>
 
@@ -696,7 +690,7 @@ body{
 
   <div class="logo-top">
 
-    <!-- GANTI NANTI -->
+    <!-- GANTI -->
     <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
 
   </div>
@@ -712,14 +706,23 @@ body{
   <div class="loading-container">
 
     <div class="loading-bar-bg">
-      <div class="loading-bar" id="loadingBar"></div>
+      <div
+        class="loading-bar"
+        id="loadingBar"
+      ></div>
     </div>
 
-    <div class="loading-text" id="loadingText">
-      Initializing map...
+    <div
+      class="loading-text"
+      id="loadingText"
+    >
+      Initialize map...
     </div>
 
-    <div class="loading-percent" id="loadingPercent">
+    <div
+      class="loading-percent"
+      id="loadingPercent"
+    >
       0%
     </div>
 
@@ -727,7 +730,7 @@ body{
 
   <div class="logo-bottom">
 
-    <!-- GANTI NANTI -->
+    <!-- GANTI -->
     <img
       src="https://upload.wikimedia.org/wikipedia/commons/2/28/Lambang_BPS_%28indonesia%29.svg"
       width="50"
@@ -814,7 +817,7 @@ body{
 <div class="legend">
 
   <div class="legend-title">
-    Warna Kecamatan
+    Warna Wilayah
   </div>
 
   <div id="legendItems"></div>
@@ -822,102 +825,117 @@ body{
 </div>
 
 <!-- =========================
-     BOTTOM SHEET
+     MINI BOTTOM SHEET
 ========================= -->
 
 <div class="bottom-sheet">
 
-  <div class="drag-line"></div>
+  <div class="bottom-sheet-header">
 
-  <div class="badge">
+    <div
+      class="sheet-title"
+      id="sheetTitle"
+    >
+      Belum ada wilayah dipilih
+    </div>
 
-    <i class="fa-solid fa-map-location-dot"></i>
-
-    KLEPON-GO ACTIVE
+    <button
+      class="toggle-sheet"
+      onclick="toggleSheet()"
+    >
+      <i
+        class="fa-solid fa-chevron-up"
+        id="toggleIcon"
+      ></i>
+    </button>
 
   </div>
 
   <div
-    class="sheet-title"
-    id="sheetTitle"
-  >
-    Belum ada wilayah dipilih
-  </div>
-
-  <div class="info-grid">
-
-    <div class="info-card">
-
-      <div class="info-label">
-        IDSLS
-      </div>
-
-      <div
-        class="info-value"
-        id="idsls"
-      >
-        -
-      </div>
-
-    </div>
-
-    <div class="info-card">
-
-      <div class="info-label">
-        IDSUBSLS
-      </div>
-
-      <div
-        class="info-value"
-        id="idsubsls"
-      >
-        -
-      </div>
-
-    </div>
-
-    <div class="info-card">
-
-      <div class="info-label">
-        Kecamatan
-      </div>
-
-      <div
-        class="info-value"
-        id="kecamatan"
-      >
-        -
-      </div>
-
-    </div>
-
-    <div class="info-card">
-
-      <div class="info-label">
-        Kelurahan
-      </div>
-
-      <div
-        class="info-value"
-        id="kelurahan"
-      >
-        -
-      </div>
-
-    </div>
-
-  </div>
-
-  <button
-    class="direction-btn"
-    onclick="navigateToPolygon()"
+    class="sheet-content"
+    id="sheetContent"
   >
 
-    <i class="fa-solid fa-route"></i>
+    <div class="info-grid">
 
-    Arahkan Saya
+      <div class="info-card">
 
-  </button>
+        <div class="info-label">
+          IDSLS
+        </div>
+
+        <div
+          class="info-value"
+          id="idsls"
+        >
+          -
+        </div>
+
+      </div>
+
+      <div class="info-card">
+
+        <div class="info-label">
+          IDSUBSLS
+        </div>
+
+        <div
+          class="info-value"
+          id="idsubsls"
+        >
+          -
+        </div>
+
+      </div>
+
+      <div class="info-card">
+
+        <div class="info-label">
+          Kecamatan
+        </div>
+
+        <div
+          class="info-value"
+          id="kecamatan"
+        >
+          -
+        </div>
+
+      </div>
+
+      <div class="info-card">
+
+        <div class="info-label">
+          Kelurahan
+        </div>
+
+        <div
+          class="info-value"
+          id="kelurahan"
+        >
+          -
+        </div>
+
+      </div>
+
+    </div>
+
+    <button
+      class="direction-btn"
+      onclick="navigateToPolygon()"
+    >
+
+      <i class="fa-solid fa-route"></i>
+
+      Arahkan Saya
+
+    </button>
+
+    <div class="creator-card">
+      KLEPON-GO by yovie.wibowo
+    </div>
+
+  </div>
 
 </div>
 
@@ -1006,14 +1024,22 @@ let allData;
 let geojsonLayer;
 let selectedCenter = null;
 
-const colors = [
+const palette = [
+
   "#95D5B2",
   "#74C69D",
+  "#52B788",
   "#B7E4C7",
-  "#D8F3DC",
-  "#9C6644",
-  "#A47148",
-  "#B08968"
+
+  "#FFB4A2",
+  "#E5989B",
+
+  "#B8C0FF",
+  "#CDB4DB",
+
+  "#FFD166",
+  "#F4A261"
+
 ];
 
 const kecamatanColorMap = {};
@@ -1038,7 +1064,7 @@ fetch('final_subsls_6171_2025-1.geojson')
 });
 
 /* =========================
-   COLOR HELPER
+   COLOR
 ========================= */
 
 function getColor(mapObj,key){
@@ -1047,9 +1073,10 @@ function getColor(mapObj,key){
 
     const index =
       Object.keys(mapObj).length
-      % colors.length;
+      % palette.length;
 
-    mapObj[key] = colors[index];
+    mapObj[key] =
+      palette[index];
 
   }
 
@@ -1064,28 +1091,31 @@ function getColor(mapObj,key){
 function renderGeoJSON(features){
 
   if(geojsonLayer){
+
     map.removeLayer(geojsonLayer);
+
   }
 
   geojsonLayer = L.geoJSON(features,{
 
     style:feature => {
 
-      const props = feature.properties;
+      const props =
+        feature.properties;
 
-      const selectedKecamatan =
+      const selectedKec =
         document
         .getElementById("kecamatanFilter")
         .value;
 
       let fill;
 
-      if(selectedKecamatan){
+      if(selectedKec){
 
         fill =
           getColor(
             kelurahanColorMap,
-            props.nmkel
+            props.nmdesa
           );
 
       }else{
@@ -1100,10 +1130,12 @@ function renderGeoJSON(features){
 
       return{
 
-        color:"#D8F3DC",
+        color:"#ffffff",
+
         weight:1,
 
         fillColor:fill,
+
         fillOpacity:0.45
 
       };
@@ -1114,7 +1146,10 @@ function renderGeoJSON(features){
 
       layer.on('click',()=>{
 
-        selectPolygon(feature,layer);
+        selectPolygon(
+          feature,
+          layer
+        );
 
       });
 
@@ -1132,7 +1167,8 @@ function renderGeoJSON(features){
 
 function selectPolygon(feature,layer){
 
-  const props = feature.properties;
+  const props =
+    feature.properties;
 
   document
     .getElementById("sheetTitle")
@@ -1157,7 +1193,7 @@ function selectPolygon(feature,layer){
   document
     .getElementById("kelurahan")
     .innerText =
-      props.nmkel || "-";
+      props.nmdesa || "-";
 
   selectedCenter =
     layer.getBounds().getCenter();
@@ -1172,7 +1208,7 @@ function selectPolygon(feature,layer){
 }
 
 /* =========================
-   KECAMATAN
+   POPULATE KECAMATAN
 ========================= */
 
 function populateKecamatan(){
@@ -1215,20 +1251,24 @@ document
 .getElementById("kecamatanFilter")
 .addEventListener("change",function(){
 
-  const value = this.value;
+  const kecamatan =
+    this.value;
 
   const kelSelect =
     document
     .getElementById("kelurahanFilter");
 
-  kelSelect.innerHTML =
-    `<option value="">
+  kelSelect.innerHTML = `
+    <option value="">
       Semua Kelurahan
-    </option>`;
+    </option>
+  `;
 
-  if(!value){
+  if(!kecamatan){
 
-    renderGeoJSON(allData.features);
+    renderGeoJSON(
+      allData.features
+    );
 
     map.setView(
       [-0.0263,109.3425],
@@ -1242,7 +1282,7 @@ document
   const filtered =
     allData.features.filter(f =>
 
-      f.properties.nmkec === value
+      f.properties.nmkec === kecamatan
 
     );
 
@@ -1255,12 +1295,13 @@ document
     temp.getBounds()
   );
 
-  const kelSet = new Set();
+  const kelSet =
+    new Set();
 
   filtered.forEach(f => {
 
     kelSet.add(
-      f.properties.nmkel
+      f.properties.nmdesa
     );
 
   });
@@ -1289,19 +1330,20 @@ document
 .getElementById("kelurahanFilter")
 .addEventListener("change",function(){
 
-  const kec =
+  const kecamatan =
     document
     .getElementById("kecamatanFilter")
     .value;
 
-  const kel = this.value;
+  const kelurahan =
+    this.value;
 
-  if(!kel){
+  if(!kelurahan){
 
     const filtered =
       allData.features.filter(f =>
 
-        f.properties.nmkec === kec
+        f.properties.nmkec === kecamatan
 
       );
 
@@ -1314,8 +1356,8 @@ document
   const filtered =
     allData.features.filter(f =>
 
-      f.properties.nmkec === kec &&
-      f.properties.nmkel === kel
+      f.properties.nmkec === kecamatan &&
+      f.properties.nmdesa === kelurahan
 
     );
 
@@ -1431,16 +1473,19 @@ function resetFilters(){
 
   document
     .getElementById("kelurahanFilter")
-    .innerHTML =
-      `<option value="">
+    .innerHTML = `
+      <option value="">
         Semua Kelurahan
-      </option>`;
+      </option>
+    `;
 
   document
     .getElementById("searchInput")
     .value = "";
 
-  renderGeoJSON(allData.features);
+  renderGeoJSON(
+    allData.features
+  );
 
   map.setView(
     [-0.0263,109.3425],
@@ -1450,7 +1495,7 @@ function resetFilters(){
 }
 
 /* =========================
-   NAVIGATION
+   NAVIGATE
 ========================= */
 
 function navigateToPolygon(){
@@ -1487,7 +1532,7 @@ function navigateToPolygon(){
 
 function updateLegend(features){
 
-  const selectedKecamatan =
+  const selectedKec =
     document
     .getElementById("kecamatanFilter")
     .value;
@@ -1508,14 +1553,14 @@ function updateLegend(features){
     let key;
     let color;
 
-    if(selectedKecamatan){
+    if(selectedKec){
 
-      key = props.nmkel;
+      key = props.nmdesa;
 
       color =
         getColor(
           kelurahanColorMap,
-          props.nmkel
+          props.nmdesa
         );
 
     }else{
@@ -1557,6 +1602,36 @@ function updateLegend(features){
     legend.appendChild(div);
 
   });
+
+}
+
+/* =========================
+   TOGGLE SHEET
+========================= */
+
+function toggleSheet(){
+
+  const content =
+    document
+    .getElementById("sheetContent");
+
+  const icon =
+    document
+    .getElementById("toggleIcon");
+
+  content.classList.toggle("hide");
+
+  if(content.classList.contains("hide")){
+
+    icon.className =
+      "fa-solid fa-chevron-down";
+
+  }else{
+
+    icon.className =
+      "fa-solid fa-chevron-up";
+
+  }
 
 }
 
