@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PETAKU6171</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      overflow: hidden;
+    }
+
+    #map {
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 999;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .search-box input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: white;
+      font-size: 14px;
+    }
+
+    .search-box input::placeholder {
+      color: #94a3b8;
+    }
+
+    .gps-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: #10b981;
+      color: white;
+      font-size: 18px;
+      box-shadow: 0 4px 18px rgba(16,185,129,0.4);
+    }
+
+    .bottom-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 280px;
+      background: rgba(15,23,42,0.96);
+      backdrop-filter: blur(12px);
+      border-radius: 24px 24px 0 0;
+      z-index: 999;
+      padding: 18px;
+      color: white;
+      box-shadow: 0 -6px 24px rgba(0,0,0,0.35);
+    }
+
+    .drag-line {
+      width: 60px;
+      height: 5px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.25);
+      margin: 0 auto 18px;
+    }
+
+    .sheet-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .info-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .label {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 3px;
+    }
+
+    .value {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .direction-btn {
+      width: 100%;
+      border: none;
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      color: white;
+      padding: 15px;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 12px;
+      box-shadow: 0 6px 20px rgba(16,185,129,0.35);
+    }
+
+    .leaflet-control-zoom {
+      border: none !important;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.2) !important;
+    }
+
+    .leaflet-control-zoom a {
+      background: rgba(15,23,42,0.92) !important;
+      color: white !important;
+      border: none !important;
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: 14px;
+      background: #111827;
+      color: white;
+    }
+
+    .leaflet-popup-tip {
+      background: #111827;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16,185,129,0.12);
+      color: #10b981;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <div class="topbar">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Cari IDSLS / IDSUBSLS / Nama SLS"
+      />
+    </div>
+
+    <button class="gps-btn" onclick="locateUser()">
+      <i class="fa-solid fa-location-crosshairs"></i>
+    </button>
+  </div>
+
+  <div class="bottom-sheet">
+    <div class="drag-line"></div>
+
+    <div class="status-badge">
+      <i class="fa-solid fa-map-location-dot"></i>
+      Viewer Wilkerstat Kota Pontianak
+    </div>
+
+    <div class="sheet-title" id="titleSLS">
+      Belum ada wilayah dipilih
+    </div>
+
+    <div class="info-card">
+      <div class="label">IDSLS</div>
+      <div class="value" id="idsls">-</div>
+    </div>
+
+    <div class="info-card">
+      <div class="label">IDSUBSLS</div>
+      <div class="value" id="idsubsls">-</div>
+    </div>
+
+    <div class="info-card">
+      <div class="label">Kecamatan</div>
+      <div class="value" id="kecamatan">-</div>
+    </div>
+
+    <button class="direction-btn" onclick="navigateToPolygon()">
+      <i class="fa-solid fa-route"></i>
+      Arahkan Saya
+    </button>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    const map = L.map('map').setView([-0.0263, 109.3425], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    let geojsonLayer;
+    let selectedFeature = null;
+    let selectedCenter = null;
+
+    const defaultStyle = {
+      color: '#38bdf8',
+      weight: 1,
+      fillColor: '#0ea5e9',
+      fillOpacity: 0.18
+    };
+
+    const highlightStyle = {
+      color: '#10b981',
+      weight: 3,
+      fillColor: '#10b981',
+      fillOpacity: 0.35
+    };
+
+    fetch('final_subsls_6171_2025-1.geojson')
+      .then(res => res.json())
+      .then(data => {
+
+        geojsonLayer = L.geoJSON(data, {
+          style: defaultStyle,
+
+          onEachFeature: (feature, layer) => {
+
+            layer.on('click', () => {
+              selectPolygon(feature, layer);
+            });
+
+            const props = feature.properties;
+
+            layer.bindPopup(`
+              <b>${props.nmsls || 'SLS'}</b><br>
+              IDSLS: ${props.idsls || '-'}<br>
+              IDSUBSLS: ${props.idsubsls || '-'}
+            `);
+          }
+
+        }).addTo(map);
+
+      });
+
+    function selectPolygon(feature, layer) {
+
+      if (selectedFeature) {
+        geojsonLayer.resetStyle(selectedFeature);
+      }
+
+      selectedFeature = layer;
+
+      layer.setStyle(highlightStyle);
+
+      map.fitBounds(layer.getBounds(), {
+        padding: [40, 40]
+      });
+
+      const props = feature.properties;
+
+      document.getElementById('titleSLS').innerText =
+        props.nmsls || 'Wilayah Terpilih';
+
+      document.getElementById('idsls').innerText =
+        props.idsls || '-';
+
+      document.getElementById('idsubsls').innerText =
+        props.idsubsls || '-';
+
+      document.getElementById('kecamatan').innerText =
+        props.nmkec || '-';
+
+      selectedCenter = layer.getBounds().getCenter();
+    }
+
+    function locateUser() {
+
+      navigator.geolocation.getCurrentPosition(position => {
+
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        map.setView([lat, lng], 16);
+
+        L.circleMarker([lat, lng], {
+          radius: 8,
+          color: '#ffffff',
+          weight: 3,
+          fillColor: '#2563eb',
+          fillOpacity: 1
+        }).addTo(map);
+
+      });
+    }
+
+    function navigateToPolygon() {
+
+      if (!selectedCenter) {
+        alert('Pilih polygon terlebih dahulu');
+        return;
+      }
+
+      const lat = selectedCenter.lat;
+      const lng = selectedCenter.lng;
+
+      window.open(
+        `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
+        '_blank'
+      );
+    }
+
+    document.getElementById('searchInput')
+      .addEventListener('keyup', function(e) {
+
+        const keyword = e.target.value.toLowerCase();
+
+        geojsonLayer.eachLayer(layer => {
+
+          const props = layer.feature.properties;
+
+          const idsls = String(props.idsls || '').toLowerCase();
+          const idsubsls = String(props.idsubsls || '').toLowerCase();
+          const nama = String(props.nmsls || '').toLowerCase();
+
+          if (
+            idsls.includes(keyword) ||
+            idsubsls.includes(keyword) ||
+            nama.includes(keyword)
+          ) {
+            selectPolygon(layer.feature, layer);
+          }
+
+        });
+
+      });
+  </script>
+
+</body>
+</html>
