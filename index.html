@@ -1,10 +1,3 @@
-```html
-<!-- =========================================================
-KLEPON-GO
-Katalog Peta Online Kota Pontianak
-Geospatial Operations
-========================================================= -->
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -35,10 +28,6 @@ Geospatial Operations
 
 <style>
 
-/* =========================================================
-RESET
-========================================================= */
-
 *{
   margin:0;
   padding:0;
@@ -51,10 +40,6 @@ body{
   background:#1B4332;
   color:white;
 }
-
-/* =========================================================
-MAP
-========================================================= */
 
 #map{
   width:100vw;
@@ -337,7 +322,7 @@ FILTER
 }
 
 /* =========================================================
-FLOAT BUTTON
+FLOAT BUTTONS
 ========================================================= */
 
 .floating-buttons{
@@ -556,28 +541,6 @@ WATERMARK
 }
 
 /* =========================================================
-POLYGON LABEL
-========================================================= */
-
-.polygon-label{
-
-  background:
-    rgba(27,67,50,0.92);
-
-  border:none;
-
-  color:white;
-
-  font-size:10px;
-  font-weight:700;
-
-  padding:4px 8px;
-
-  border-radius:8px;
-
-}
-
-/* =========================================================
 SEARCH HIGHLIGHT
 ========================================================= */
 
@@ -611,10 +574,6 @@ SEARCH HIGHLIGHT
 </head>
 
 <body>
-
-<!-- =========================================================
-SPLASH
-========================================================= -->
 
 <div id="splashScreen">
 
@@ -662,15 +621,7 @@ SPLASH
 
 </div>
 
-<!-- =========================================================
-MAP
-========================================================= -->
-
 <div id="map"></div>
-
-<!-- =========================================================
-WATERMARK
-========================================================= -->
 
 <div class="map-watermark">
 
@@ -679,10 +630,6 @@ WATERMARK
   >
 
 </div>
-
-<!-- =========================================================
-AREA POPUP
-========================================================= -->
 
 <div
   class="area-popup"
@@ -702,10 +649,6 @@ AREA POPUP
   </p>
 
 </div>
-
-<!-- =========================================================
-TOP UI
-========================================================= -->
 
 <div class="top-ui">
 
@@ -779,10 +722,6 @@ TOP UI
 
 </div>
 
-<!-- =========================================================
-FLOAT BUTTONS
-========================================================= -->
-
 <div class="floating-buttons">
 
   <button
@@ -804,10 +743,6 @@ FLOAT BUTTONS
   </button>
 
 </div>
-
-<!-- =========================================================
-BOTTOM SHEET
-========================================================= -->
 
 <div class="bottom-sheet">
 
@@ -924,6 +859,8 @@ VARIABLES
 let allData;
 let geojsonLayer;
 
+let currentMode = "default";
+
 let userMarker = null;
 
 let currentUserLat = null;
@@ -940,9 +877,36 @@ const palette = [
   "#a569bd",
   "#58d68d",
   "#f5b041",
-  "#ec7063"
+  "#ec7063",
+  "#48c9b0",
+  "#af7ac5"
 
 ];
+
+const kecamatanColors = {};
+const kelurahanColors = {};
+const pplColors = {};
+
+/* =========================================================
+GET COLOR
+========================================================= */
+
+function getColor(obj,key){
+
+  if(!obj[key]){
+
+    const index =
+      Object.keys(obj).length %
+      palette.length;
+
+    obj[key] =
+      palette[index];
+
+  }
+
+  return obj[key];
+
+}
 
 /* =========================================================
 PERSON ICON
@@ -969,42 +933,6 @@ const personIcon = L.divIcon({
 });
 
 /* =========================================================
-LOADING BAR
-========================================================= */
-
-let progress = 0;
-
-const loadingInterval = setInterval(()=>{
-
-  progress += 10;
-
-  if(progress > 100){
-    progress = 100;
-  }
-
-  document
-    .getElementById(
-      'loadingBar'
-    )
-    .style.width = progress + '%';
-
-  document
-    .getElementById(
-      'loadingPercent'
-    )
-    .innerText = progress + '%';
-
-  if(progress >= 100){
-
-    clearInterval(
-      loadingInterval
-    );
-
-  }
-
-},150);
-
-/* =========================================================
 LOAD GEOJSON
 ========================================================= */
 
@@ -1026,20 +954,16 @@ fetch(
 
   initializeGPS();
 
-  setTimeout(()=>{
-
-    document
-      .getElementById(
-        'splashScreen'
-      )
-      .style.display = 'none';
-
-  },1000);
+  document
+    .getElementById(
+      'splashScreen'
+    )
+    .style.display = 'none';
 
 });
 
 /* =========================================================
-RENDER
+RENDER GEOJSON
 ========================================================= */
 
 function renderGeoJSON(features){
@@ -1054,23 +978,78 @@ function renderGeoJSON(features){
 
   geojsonLayer = L.geoJSON(features,{
 
-    style:feature => ({
+    style:feature => {
 
-      color:'#ffffff',
+      const props =
+        feature.properties;
 
-      weight:1,
+      let fillColor =
+        "#52B788";
 
-      fillOpacity:0.55,
+      if(currentMode === "default"){
 
-      fillColor:
-        palette[
-          Math.floor(
-            Math.random() *
-            palette.length
-          )
-        ]
+        fillColor =
 
-    }),
+          getColor(
+            kecamatanColors,
+            props.nmkec
+          );
+
+      }
+
+      if(currentMode === "kecamatan"){
+
+        fillColor =
+
+          getColor(
+            kelurahanColors,
+            props.nmdesa
+          );
+
+      }
+
+      if(currentMode === "kelurahan"){
+
+        fillColor =
+          "#52B788";
+
+      }
+
+      if(currentMode === "search_ppl"){
+
+        fillColor =
+
+          getColor(
+            kecamatanColors,
+            props.nmkec
+          );
+
+      }
+
+      if(currentMode === "search_pml"){
+
+        fillColor =
+
+          getColor(
+            pplColors,
+            props.namapencacah_se2026
+          );
+
+      }
+
+      return{
+
+        color:"#ffffff",
+
+        weight:1,
+
+        fillColor:fillColor,
+
+        fillOpacity:0.6
+
+      };
+
+    },
 
     onEachFeature:(feature,layer)=>{
 
@@ -1093,7 +1072,7 @@ function renderGeoJSON(features){
 SELECT POLYGON
 ========================================================= */
 
-function selectPolygon(feature,layer){
+function selectPolygon(feature){
 
   const props =
     feature.properties;
@@ -1131,7 +1110,6 @@ function selectPolygon(feature,layer){
       'ppl'
     )
     .innerText =
-
       props.namapencacah_se2026 || '-';
 
   document
@@ -1139,10 +1117,208 @@ function selectPolygon(feature,layer){
       'pml'
     )
     .innerText =
-
       props.namapengawas_se2026 || '-';
 
 }
+
+/* =========================================================
+POPULATE KECAMATAN
+========================================================= */
+
+function populateKecamatan(){
+
+  const unique =
+    [...new Set(
+
+      allData.features.map(f =>
+
+        f.properties.nmkec
+
+      )
+
+    )];
+
+  const select =
+    document
+    .getElementById(
+      'kecamatanFilter'
+    );
+
+  unique.forEach(item => {
+
+    const option =
+      document.createElement(
+        'option'
+      );
+
+    option.value = item;
+    option.textContent = item;
+
+    select.appendChild(
+      option
+    );
+
+  });
+
+}
+
+/* =========================================================
+POPULATE KELURAHAN
+========================================================= */
+
+function populateKelurahan(kecamatan){
+
+  const kelSelect =
+    document
+    .getElementById(
+      'kelurahanFilter'
+    );
+
+  kelSelect.innerHTML = `
+
+    <option value="">
+      Semua Kelurahan
+    </option>
+
+  `;
+
+  const unique =
+    [...new Set(
+
+      allData.features
+      .filter(f =>
+
+        f.properties.nmkec === kecamatan
+
+      )
+      .map(f =>
+
+        f.properties.nmdesa
+
+      )
+
+    )];
+
+  unique.forEach(item => {
+
+    const option =
+      document.createElement(
+        'option'
+      );
+
+    option.value = item;
+    option.textContent = item;
+
+    kelSelect.appendChild(
+      option
+    );
+
+  });
+
+}
+
+/* =========================================================
+FILTER KECAMATAN
+========================================================= */
+
+document
+.getElementById(
+  'kecamatanFilter'
+)
+.addEventListener(
+  'change',
+  function(){
+
+    const kecamatan =
+      this.value;
+
+    if(!kecamatan){
+
+      currentMode =
+        "default";
+
+      renderGeoJSON(
+        allData.features
+      );
+
+      return;
+
+    }
+
+    currentMode =
+      "kecamatan";
+
+    populateKelurahan(
+      kecamatan
+    );
+
+    const filtered =
+      allData.features.filter(f =>
+
+        f.properties.nmkec === kecamatan
+
+      );
+
+    renderGeoJSON(filtered);
+
+  }
+);
+
+/* =========================================================
+FILTER KELURAHAN
+========================================================= */
+
+document
+.getElementById(
+  'kelurahanFilter'
+)
+.addEventListener(
+  'change',
+  function(){
+
+    const kecamatan =
+      document
+      .getElementById(
+        'kecamatanFilter'
+      )
+      .value;
+
+    const kelurahan =
+      this.value;
+
+    if(!kelurahan){
+
+      currentMode =
+        "kecamatan";
+
+      const filtered =
+        allData.features.filter(f =>
+
+          f.properties.nmkec === kecamatan
+
+        );
+
+      renderGeoJSON(filtered);
+
+      return;
+
+    }
+
+    currentMode =
+      "kelurahan";
+
+    const filtered =
+      allData.features.filter(f =>
+
+        f.properties.nmkec === kecamatan &&
+        f.properties.nmdesa === kelurahan
+
+      );
+
+    renderGeoJSON(filtered);
+
+  }
+);
 
 /* =========================================================
 SEARCH
@@ -1168,61 +1344,64 @@ function searchPolygon(){
 
   if(!keyword)return;
 
-  const matchedLayers = [];
+  let filtered = [];
 
-  geojsonLayer.eachLayer(layer => {
+  if(type === 'idsls'){
 
-    const props =
-      layer.feature.properties;
+    currentMode =
+      "default";
 
-    let match = false;
+    filtered =
+      allData.features.filter(f =>
 
-    if(type === 'idsls'){
+        String(f.properties.idsls)
+        .includes(keyword)
 
-      match =
+      );
 
-        String(props.idsls)
-        .includes(keyword);
+  }
 
-    }
+  if(type === 'ppl'){
 
-    if(type === 'ppl'){
+    currentMode =
+      "search_ppl";
 
-      match =
-
-        String(
-          props.namapencacah_se2026
-        )
-        .toLowerCase()
-        .includes(keyword);
-
-    }
-
-    if(type === 'pml'){
-
-      match =
+    filtered =
+      allData.features.filter(f =>
 
         String(
-          props.namapengawas_se2026
+          f.properties.namapencacah_se2026
         )
         .toLowerCase()
-        .includes(keyword);
+        .includes(keyword)
 
-    }
+      );
 
-    if(match){
+  }
 
-      matchedLayers.push(layer);
+  if(type === 'pml'){
 
-      layer.setStyle({
+    currentMode =
+      "search_pml";
 
-        color:'#ffffff',
+    filtered =
+      allData.features.filter(f =>
 
-        weight:4,
+        String(
+          f.properties.namapengawas_se2026
+        )
+        .toLowerCase()
+        .includes(keyword)
 
-        fillOpacity:0.95
+      );
 
-      });
+  }
+
+  renderGeoJSON(filtered);
+
+  setTimeout(()=>{
+
+    geojsonLayer.eachLayer(layer=>{
 
       if(layer._path){
 
@@ -1231,34 +1410,15 @@ function searchPolygon(){
 
       }
 
-    }
+    });
 
-    else{
+  },200);
 
-      layer.setStyle({
-
-        fillOpacity:0.08,
-
-        opacity:0.2
-
-      });
-
-      if(layer._path){
-
-        layer._path.classList
-        .remove('search-highlight');
-
-      }
-
-    }
-
-  });
-
-  if(matchedLayers.length){
+  if(filtered.length){
 
     const group =
       L.featureGroup(
-        matchedLayers
+        geojsonLayer.getLayers()
       );
 
     map.fitBounds(
@@ -1319,18 +1479,6 @@ function initializeGPS(){
         lng
       );
 
-    },
-
-    err => {
-
-      console.log(err);
-
-    },
-
-    {
-
-      enableHighAccuracy:true
-
     }
 
   );
@@ -1338,7 +1486,7 @@ function initializeGPS(){
 }
 
 /* =========================================================
-RECENTER USER
+RECENTER
 ========================================================= */
 
 function recenterUser(){
@@ -1368,7 +1516,7 @@ function recenterUser(){
 }
 
 /* =========================================================
-DETECT CURRENT POLYGON
+AREA DETECT
 ========================================================= */
 
 function detectCurrentPolygon(lat,lng){
@@ -1456,88 +1604,13 @@ function showAreaPopup(title,desc){
 }
 
 /* =========================================================
-FILTER KECAMATAN
-========================================================= */
-
-function populateKecamatan(){
-
-  const unique =
-    [...new Set(
-
-      allData.features.map(f =>
-
-        f.properties.nmkec
-
-      )
-
-    )];
-
-  const select =
-    document
-    .getElementById(
-      'kecamatanFilter'
-    );
-
-  unique.forEach(item => {
-
-    const option =
-      document.createElement(
-        'option'
-      );
-
-    option.value = item;
-    option.textContent = item;
-
-    select.appendChild(
-      option
-    );
-
-  });
-
-}
-
-/* =========================================================
-FILTER CHANGE
-========================================================= */
-
-document
-.getElementById(
-  'kecamatanFilter'
-)
-.addEventListener(
-  'change',
-  function(){
-
-    const kecamatan =
-      this.value;
-
-    if(!kecamatan){
-
-      renderGeoJSON(
-        allData.features
-      );
-
-      return;
-
-    }
-
-    const filtered =
-      allData.features.filter(f =>
-
-        f.properties.nmkec === kecamatan
-
-      );
-
-    renderGeoJSON(filtered);
-
-  }
-);
-
-/* =========================================================
 RESET
 ========================================================= */
 
 function resetFilters(){
+
+  currentMode =
+    "default";
 
   document
     .getElementById(
@@ -1550,6 +1623,18 @@ function resetFilters(){
       'kecamatanFilter'
     )
     .value = '';
+
+  document
+    .getElementById(
+      'kelurahanFilter'
+    )
+    .innerHTML = `
+
+      <option value="">
+        Semua Kelurahan
+      </option>
+
+    `;
 
   renderGeoJSON(
     allData.features
@@ -1566,4 +1651,3 @@ function resetFilters(){
 
 </body>
 </html>
-```
