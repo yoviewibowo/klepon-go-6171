@@ -28,6 +28,10 @@
 
 <style>
 
+/* =========================================================
+RESET
+========================================================= */
+
 *{
   margin:0;
   padding:0;
@@ -541,6 +545,30 @@ WATERMARK
 }
 
 /* =========================================================
+POLYGON LABEL
+========================================================= */
+
+.polygon-label{
+
+  background:
+    rgba(27,67,50,0.92);
+
+  border:none;
+
+  color:white;
+
+  font-size:10px;
+  font-weight:700;
+
+  padding:4px 8px;
+
+  border-radius:8px;
+
+  box-shadow:none;
+
+}
+
+/* =========================================================
 SEARCH HIGHLIGHT
 ========================================================= */
 
@@ -606,7 +634,7 @@ SEARCH HIGHLIGHT
       class="loading-percent"
       id="loadingPercent"
     >
-      0%
+      100%
     </div>
 
   </div>
@@ -836,10 +864,6 @@ SEARCH HIGHLIGHT
 
 <script>
 
-/* =========================================================
-MAP
-========================================================= */
-
 const map = L.map('map',{
   zoomControl:false
 })
@@ -851,10 +875,6 @@ L.tileLayer(
     attribution:'© OpenStreetMap'
   }
 ).addTo(map);
-
-/* =========================================================
-VARIABLES
-========================================================= */
 
 let allData;
 let geojsonLayer;
@@ -887,10 +907,6 @@ const kecamatanColors = {};
 const kelurahanColors = {};
 const pplColors = {};
 
-/* =========================================================
-GET COLOR
-========================================================= */
-
 function getColor(obj,key){
 
   if(!obj[key]){
@@ -907,10 +923,6 @@ function getColor(obj,key){
   return obj[key];
 
 }
-
-/* =========================================================
-PERSON ICON
-========================================================= */
 
 const personIcon = L.divIcon({
 
@@ -931,10 +943,6 @@ const personIcon = L.divIcon({
   iconAnchor:[21,21]
 
 });
-
-/* =========================================================
-LOAD GEOJSON
-========================================================= */
 
 fetch(
   'final_subsls_6171_2025-1_se2026.geojson'
@@ -961,10 +969,6 @@ fetch(
     .style.display = 'none';
 
 });
-
-/* =========================================================
-RENDER GEOJSON
-========================================================= */
 
 function renderGeoJSON(features){
 
@@ -1039,9 +1043,9 @@ function renderGeoJSON(features){
 
       return{
 
-        color:"#ffffff",
+        color:"#111111",
 
-        weight:1,
+        weight:1.5,
 
         fillColor:fillColor,
 
@@ -1053,11 +1057,39 @@ function renderGeoJSON(features){
 
     onEachFeature:(feature,layer)=>{
 
+      const props =
+        feature.properties;
+
+      if(
+
+        currentMode === "kelurahan" ||
+
+        currentMode === "search_ppl"
+
+      ){
+
+        layer.bindTooltip(
+
+          props.nmsls || '-',
+
+          {
+
+            permanent:true,
+
+            direction:'center',
+
+            className:'polygon-label'
+
+          }
+
+        );
+
+      }
+
       layer.on('click',()=>{
 
         selectPolygon(
-          feature,
-          layer
+          feature
         );
 
       });
@@ -1067,10 +1099,6 @@ function renderGeoJSON(features){
   }).addTo(map);
 
 }
-
-/* =========================================================
-SELECT POLYGON
-========================================================= */
 
 function selectPolygon(feature){
 
@@ -1121,22 +1149,41 @@ function selectPolygon(feature){
 
 }
 
-/* =========================================================
-POPULATE KECAMATAN
-========================================================= */
-
 function populateKecamatan(){
 
-  const unique =
-    [...new Set(
+  const uniqueMap =
+    new Map();
 
-      allData.features.map(f =>
+  allData.features.forEach(f => {
 
-        f.properties.nmkec
+    const props =
+      f.properties;
 
+    uniqueMap.set(
+
+      props.kdkec,
+
+      {
+
+        kode:props.kdkec,
+
+        nama:props.nmkec
+
+      }
+
+    );
+
+  });
+
+  const sorted =
+    [...uniqueMap.values()]
+    .sort((a,b)=>
+
+      a.kode.localeCompare(
+        b.kode
       )
 
-    )];
+    );
 
   const select =
     document
@@ -1144,15 +1191,19 @@ function populateKecamatan(){
       'kecamatanFilter'
     );
 
-  unique.forEach(item => {
+  sorted.forEach(item => {
 
     const option =
       document.createElement(
         'option'
       );
 
-    option.value = item;
-    option.textContent = item;
+    option.value =
+      item.nama;
+
+    option.textContent =
+
+      `[${item.kode}] ${item.nama}`;
 
     select.appendChild(
       option
@@ -1161,10 +1212,6 @@ function populateKecamatan(){
   });
 
 }
-
-/* =========================================================
-POPULATE KELURAHAN
-========================================================= */
 
 function populateKelurahan(kecamatan){
 
@@ -1182,32 +1229,59 @@ function populateKelurahan(kecamatan){
 
   `;
 
-  const unique =
-    [...new Set(
+  const uniqueMap =
+    new Map();
 
-      allData.features
-      .filter(f =>
+  allData.features
+  .filter(f =>
 
-        f.properties.nmkec === kecamatan
+    f.properties.nmkec === kecamatan
 
+  )
+  .forEach(f => {
+
+    const props =
+      f.properties;
+
+    uniqueMap.set(
+
+      props.kddesa,
+
+      {
+
+        kode:props.kddesa,
+
+        nama:props.nmdesa
+
+      }
+
+    );
+
+  });
+
+  const sorted =
+    [...uniqueMap.values()]
+    .sort((a,b)=>
+
+      a.kode.localeCompare(
+        b.kode
       )
-      .map(f =>
 
-        f.properties.nmdesa
+    );
 
-      )
-
-    )];
-
-  unique.forEach(item => {
+  sorted.forEach(item => {
 
     const option =
       document.createElement(
         'option'
       );
 
-    option.value = item;
-    option.textContent = item;
+    option.value =
+      item.nama;
+
+    option.textContent =
+
+      `[${item.kode}] ${item.nama}`;
 
     kelSelect.appendChild(
       option
@@ -1216,10 +1290,6 @@ function populateKelurahan(kecamatan){
   });
 
 }
-
-/* =========================================================
-FILTER KECAMATAN
-========================================================= */
 
 document
 .getElementById(
@@ -1263,10 +1333,6 @@ document
 
   }
 );
-
-/* =========================================================
-FILTER KELURAHAN
-========================================================= */
 
 document
 .getElementById(
@@ -1319,10 +1385,6 @@ document
 
   }
 );
-
-/* =========================================================
-SEARCH
-========================================================= */
 
 function searchPolygon(){
 
@@ -1432,10 +1494,6 @@ function searchPolygon(){
 
 }
 
-/* =========================================================
-GPS
-========================================================= */
-
 function initializeGPS(){
 
   navigator.geolocation.watchPosition(
@@ -1485,10 +1543,6 @@ function initializeGPS(){
 
 }
 
-/* =========================================================
-RECENTER
-========================================================= */
-
 function recenterUser(){
 
   if(
@@ -1514,10 +1568,6 @@ function recenterUser(){
   }
 
 }
-
-/* =========================================================
-AREA DETECT
-========================================================= */
 
 function detectCurrentPolygon(lat,lng){
 
@@ -1563,10 +1613,6 @@ function detectCurrentPolygon(lat,lng){
 
 }
 
-/* =========================================================
-AREA POPUP
-========================================================= */
-
 function showAreaPopup(title,desc){
 
   const popup =
@@ -1602,10 +1648,6 @@ function showAreaPopup(title,desc){
   },3000);
 
 }
-
-/* =========================================================
-RESET
-========================================================= */
 
 function resetFilters(){
 
