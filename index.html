@@ -1,5 +1,13 @@
+```html
+<!-- =========================================================
+KLEPON-GO
+Katalog Peta Online Kota Pontianak
+Geospatial Operations
+========================================================= -->
+
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 
 <meta charset="UTF-8"/>
@@ -21,13 +29,15 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 />
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 
 <style>
 
-/* =========================
+/* =========================================================
 RESET
-========================= */
+========================================================= */
 
 *{
   margin:0;
@@ -36,35 +46,24 @@ RESET
   font-family:'Segoe UI',sans-serif;
 }
 
-:root{
-
-  --dark:#1B4332;
-  --green:#2D6A4F;
-  --light:#52B788;
-
-  --soft:#D8F3DC;
-  --muted:#B7D5C4;
-
-}
-
 body{
   overflow:hidden;
-  background:var(--dark);
+  background:#1B4332;
   color:white;
 }
 
-/* =========================
+/* =========================================================
 MAP
-========================= */
+========================================================= */
 
 #map{
   width:100vw;
   height:100vh;
 }
 
-/* =========================
+/* =========================================================
 SPLASH
-========================= */
+========================================================= */
 
 #splashScreen{
 
@@ -88,51 +87,10 @@ SPLASH
 
 }
 
-.splash-glow{
-
-  position:absolute;
-
-  width:420px;
-  height:420px;
-
-  border-radius:50%;
-
-  background:#95D5B244;
-
-  filter:blur(120px);
-
-  animation:pulse 4s infinite;
-
-}
-
-@keyframes pulse{
-
-  0%{
-    transform:scale(1);
-  }
-
-  50%{
-    transform:scale(1.2);
-  }
-
-  100%{
-    transform:scale(1);
-  }
-
-}
-
 .logo-top{
 
-  width:110px;
-  height:110px;
-
-  border-radius:28px;
-
-  background:
-    rgba(255,255,255,0.08);
-
-  border:
-    2px dashed rgba(255,255,255,0.2);
+  width:220px;
+  height:120px;
 
   display:flex;
   align-items:center;
@@ -143,25 +101,44 @@ SPLASH
 }
 
 .logo-top img{
-  width:70%;
-}
 
-.app-title{
+  width:100%;
+  height:100%;
 
-  font-size:34px;
-  font-weight:900;
-
-  letter-spacing:2px;
+  object-fit:contain;
 
 }
 
-.app-subtitle{
+.logo-bottom{
 
-  margin-top:8px;
+  position:absolute;
 
-  color:#E9F5EC;
+  bottom:40px;
 
-  font-size:14px;
+  width:140px;
+  height:70px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:10px;
+
+  background:
+    rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(12px);
+
+  border-radius:20px;
+
+}
+
+.logo-bottom img{
+
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
 
 }
 
@@ -169,7 +146,7 @@ SPLASH
 
   width:260px;
 
-  margin-top:40px;
+  margin-top:34px;
 
 }
 
@@ -180,10 +157,10 @@ SPLASH
 
   border-radius:999px;
 
+  overflow:hidden;
+
   background:
     rgba(255,255,255,0.08);
-
-  overflow:hidden;
 
 }
 
@@ -202,25 +179,13 @@ SPLASH
       #a569bd
     );
 
-  transition:width .4s ease;
-
-}
-
-.loading-text{
-
-  margin-top:12px;
-
-  text-align:center;
-
-  font-size:13px;
-
-  color:#E9F5EC;
+  transition:.3s ease;
 
 }
 
 .loading-percent{
 
-  margin-top:8px;
+  margin-top:12px;
 
   text-align:center;
 
@@ -229,9 +194,9 @@ SPLASH
 
 }
 
-/* =========================
+/* =========================================================
 TOP UI
-========================= */
+========================================================= */
 
 .top-ui{
 
@@ -259,35 +224,18 @@ TOP UI
   border:
     1px solid rgba(255,255,255,0.06);
 
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.35);
-
 }
 
-/* =========================
+/* =========================================================
 SEARCH
-========================= */
+========================================================= */
 
 .search-box{
 
   display:flex;
-  align-items:center;
   gap:10px;
 
-  padding:10px 12px;
-
-  border-radius:20px;
-
-  background:
-    rgba(255,255,255,0.06);
-
   margin-bottom:12px;
-
-}
-
-.search-box i{
-
-  color:#B7D5C4;
 
 }
 
@@ -295,13 +243,17 @@ SEARCH
 
   flex:1;
 
-  background:none;
   border:none;
   outline:none;
 
-  color:white;
+  padding:14px;
 
-  font-size:14px;
+  border-radius:16px;
+
+  background:
+    rgba(255,255,255,0.08);
+
+  color:white;
 
 }
 
@@ -309,14 +261,35 @@ SEARCH
   color:#B7D5C4;
 }
 
+.search-type{
+
+  width:130px;
+
+  border:none;
+  outline:none;
+
+  border-radius:16px;
+
+  padding:14px;
+
+  background:
+    rgba(255,255,255,0.08);
+
+  color:white;
+
+}
+
+.search-type option{
+  color:black;
+}
+
 .search-btn{
 
-  width:42px;
-  height:42px;
+  width:54px;
 
   border:none;
 
-  border-radius:14px;
+  border-radius:16px;
 
   background:
     linear-gradient(
@@ -327,17 +300,16 @@ SEARCH
 
   color:white;
 
-  font-size:14px;
-
 }
 
-/* =========================
+/* =========================================================
 FILTER
-========================= */
+========================================================= */
 
 .filter-group{
 
   display:grid;
+
   grid-template-columns:1fr 1fr;
 
   gap:10px;
@@ -346,21 +318,17 @@ FILTER
 
 .filter-select{
 
-  width:100%;
-
   border:none;
   outline:none;
 
   padding:14px;
 
-  border-radius:18px;
+  border-radius:16px;
 
   background:
-    rgba(255,255,255,0.06);
+    rgba(255,255,255,0.08);
 
   color:white;
-
-  font-size:13px;
 
 }
 
@@ -368,9 +336,9 @@ FILTER
   color:black;
 }
 
-/* =========================
+/* =========================================================
 FLOAT BUTTON
-========================= */
+========================================================= */
 
 .floating-buttons{
 
@@ -408,66 +376,9 @@ FLOAT BUTTON
 
 }
 
-/* =========================
-LEGEND
-========================= */
-
-.legend{
-
-  position:fixed;
-
-  left:14px;
-  bottom:150px;
-
-  z-index:9999;
-
-  max-width:170px;
-
-  padding:12px;
-
-  border-radius:20px;
-
-  background:
-    rgba(27,67,50,0.88);
-
-  backdrop-filter:blur(14px);
-
-}
-
-.legend-title{
-
-  font-size:12px;
-  font-weight:700;
-
-  margin-bottom:10px;
-
-}
-
-.legend-item{
-
-  display:flex;
-  align-items:center;
-
-  gap:8px;
-
-  margin-bottom:6px;
-
-  font-size:11px;
-
-}
-
-.legend-color{
-
-  width:12px;
-  height:12px;
-
-  border-radius:4px;
-
-}
-
-/* =========================
+/* =========================================================
 BOTTOM SHEET
-========================= */
+========================================================= */
 
 .bottom-sheet{
 
@@ -490,59 +401,19 @@ BOTTOM SHEET
 
 }
 
-.bottom-sheet-header{
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-}
-
 .sheet-title{
 
-  font-size:16px;
+  font-size:18px;
   font-weight:800;
 
-}
-
-.toggle-sheet{
-
-  width:34px;
-  height:34px;
-
-  border:none;
-
-  border-radius:12px;
-
-  background:
-    rgba(255,255,255,0.08);
-
-  color:white;
-
-}
-
-.sheet-content{
-
-  margin-top:12px;
-
-  overflow:hidden;
-
-  max-height:400px;
-
-  transition:.3s ease;
-
-}
-
-.sheet-content.hide{
-
-  max-height:0;
-  margin-top:0;
+  margin-bottom:12px;
 
 }
 
 .info-grid{
 
   display:grid;
+
   grid-template-columns:1fr 1fr;
 
   gap:10px;
@@ -577,95 +448,9 @@ BOTTOM SHEET
 
 }
 
-.direction-btn{
-
-  margin-top:12px;
-
-  width:100%;
-
-  border:none;
-
-  padding:14px;
-
-  border-radius:18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #52B788,
-      #40916C
-    );
-
-  color:white;
-
-  font-size:14px;
-  font-weight:800;
-
-}
-
-.creator-card{
-
-  margin-top:10px;
-
-  text-align:center;
-
-  font-size:11px;
-
-  color:#B7D5C4;
-
-}
-
-/* =========================
-POLYGON LABEL
-========================= */
-
-.polygon-label{
-
-  background:
-    rgba(27,67,50,0.92);
-
-  border:none;
-
-  color:white;
-
-  font-size:10px;
-  font-weight:700;
-
-  padding:4px 8px;
-
-  border-radius:8px;
-
-}
-
-/* =========================
-SEARCH HIGHLIGHT
-========================= */
-
-.search-highlight{
-
-  animation:pulseHighlight 1.5s infinite;
-
-}
-
-@keyframes pulseHighlight{
-
-  0%{
-    filter:drop-shadow(0 0 0px #fff);
-  }
-
-  50%{
-    filter:drop-shadow(0 0 12px #fff);
-  }
-
-  100%{
-    filter:drop-shadow(0 0 0px #fff);
-  }
-
-}
-
-/* =========================
+/* =========================================================
 AREA POPUP
-========================= */
+========================================================= */
 
 .area-popup{
 
@@ -694,7 +479,6 @@ AREA POPUP
   text-align:center;
 
   opacity:0;
-  pointer-events:none;
 
   transition:.5s ease;
 
@@ -710,40 +494,9 @@ AREA POPUP
 
 }
 
-.area-popup-sub{
-
-  font-size:11px;
-
-  color:#B7D5C4;
-
-  margin-bottom:6px;
-
-  letter-spacing:2px;
-
-  text-transform:uppercase;
-
-}
-
-.area-popup-title{
-
-  font-size:20px;
-  font-weight:900;
-
-  margin-bottom:6px;
-
-}
-
-.area-popup-desc{
-
-  font-size:13px;
-
-  color:#D8F3DC;
-
-}
-
-/* =========================
+/* =========================================================
 PERSON MARKER
-========================= */
+========================================================= */
 
 .person-marker{
 
@@ -754,8 +507,6 @@ PERSON MARKER
   align-items:center;
   justify-content:center;
 
-  transition:transform .2s linear;
-
 }
 
 .person-marker i{
@@ -764,14 +515,93 @@ PERSON MARKER
 
   color:#4ecdc4;
 
-  text-shadow:
-    0 0 12px rgba(255,255,255,0.8);
+}
+
+/* =========================================================
+WATERMARK
+========================================================= */
+
+.map-watermark{
+
+  position:fixed;
+
+  left:18px;
+  bottom:18px;
+
+  z-index:9998;
+
+  width:54px;
+  height:54px;
+
+  background:
+    rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(12px);
+
+  border-radius:16px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
 }
 
-/* =========================
-LEAFLET
-========================= */
+.map-watermark img{
+
+  width:80%;
+  height:80%;
+
+  object-fit:contain;
+
+}
+
+/* =========================================================
+POLYGON LABEL
+========================================================= */
+
+.polygon-label{
+
+  background:
+    rgba(27,67,50,0.92);
+
+  border:none;
+
+  color:white;
+
+  font-size:10px;
+  font-weight:700;
+
+  padding:4px 8px;
+
+  border-radius:8px;
+
+}
+
+/* =========================================================
+SEARCH HIGHLIGHT
+========================================================= */
+
+.search-highlight{
+
+  animation:pulseHighlight 1.5s infinite;
+
+}
+
+@keyframes pulseHighlight{
+
+  0%{
+    filter:drop-shadow(0 0 0px #fff);
+  }
+
+  50%{
+    filter:drop-shadow(0 0 12px #fff);
+  }
+
+  100%{
+    filter:drop-shadow(0 0 0px #fff);
+  }
+
+}
 
 .leaflet-control-zoom{
   display:none !important;
@@ -782,38 +612,35 @@ LEAFLET
 
 <body>
 
-<!-- SPLASH -->
+<!-- =========================================================
+SPLASH
+========================================================= -->
 
 <div id="splashScreen">
 
-  <div class="splash-glow"></div>
-
   <div class="logo-top">
-    <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png">
+
+    <img
+      src="icon-klepon-go-6171.png"
+    >
+
   </div>
 
-  <div class="app-title">
-    KLEPON-GO
-  </div>
+  <h1>KLEPON-GO</h1>
 
-  <div class="app-subtitle">
+  <p>
     Viewer Wilkerstat Kota Pontianak
-  </div>
+  </p>
 
   <div class="loading-container">
 
     <div class="loading-bar-bg">
+
       <div
         class="loading-bar"
         id="loadingBar"
       ></div>
-    </div>
 
-    <div
-      class="loading-text"
-      id="loadingText"
-    >
-      Initialize map...
     </div>
 
     <div
@@ -825,38 +652,60 @@ LEAFLET
 
   </div>
 
+  <div class="logo-bottom">
+
+    <img
+      src="logo-bps-kota-pontianak-biru.png"
+    >
+
+  </div>
+
 </div>
+
+<!-- =========================================================
+MAP
+========================================================= -->
 
 <div id="map"></div>
 
-<!-- AREA POPUP -->
+<!-- =========================================================
+WATERMARK
+========================================================= -->
 
-<div
-  id="areaPopup"
-  class="area-popup"
->
+<div class="map-watermark">
 
-  <div class="area-popup-sub">
-    Kamu Memasuki
-  </div>
-
-  <div
-    class="area-popup-title"
-    id="areaPopupTitle"
+  <img
+    src="logo-bps-kota-pontianak-biru.png"
   >
-    SLS XXXXX
-  </div>
-
-  <div
-    class="area-popup-desc"
-    id="areaPopupDesc"
-  >
-    Pontianak Selatan
-  </div>
 
 </div>
 
-<!-- TOP UI -->
+<!-- =========================================================
+AREA POPUP
+========================================================= -->
+
+<div
+  class="area-popup"
+  id="areaPopup"
+>
+
+  <div>
+    Kamu Memasuki
+  </div>
+
+  <h2 id="areaPopupTitle">
+    SLS XXXXX
+  </h2>
+
+  <p id="areaPopupDesc">
+    Pontianak Selatan
+  </p>
+
+</div>
+
+<!-- =========================================================
+TOP UI
+========================================================= -->
 
 <div class="top-ui">
 
@@ -864,19 +713,38 @@ LEAFLET
 
     <div class="search-box">
 
-      <i class="fa-solid fa-hashtag"></i>
+      <select
+        id="searchType"
+        class="search-type"
+      >
+
+        <option value="idsls">
+          IDSLS
+        </option>
+
+        <option value="ppl">
+          PPL
+        </option>
+
+        <option value="pml">
+          PML
+        </option>
+
+      </select>
 
       <input
-        type="number"
+        type="text"
         id="searchInput"
-        placeholder="Masukkan IDSLS / IDSUBSLS..."
+        placeholder="Cari IDSLS / Nama Petugas..."
       >
 
       <button
         class="search-btn"
         onclick="searchPolygon()"
       >
+
         <i class="fa-solid fa-magnifying-glass"></i>
+
       </button>
 
     </div>
@@ -884,21 +752,25 @@ LEAFLET
     <div class="filter-group">
 
       <select
-        class="filter-select"
         id="kecamatanFilter"
+        class="filter-select"
       >
+
         <option value="">
           Semua Kecamatan
         </option>
+
       </select>
 
       <select
-        class="filter-select"
         id="kelurahanFilter"
+        class="filter-select"
       >
+
         <option value="">
           Semua Kelurahan
         </option>
+
       </select>
 
     </div>
@@ -907,7 +779,9 @@ LEAFLET
 
 </div>
 
-<!-- FLOAT -->
+<!-- =========================================================
+FLOAT BUTTONS
+========================================================= -->
 
 <div class="floating-buttons">
 
@@ -915,150 +789,121 @@ LEAFLET
     class="float-btn"
     onclick="recenterUser()"
   >
+
     <i class="fa-solid fa-location-crosshairs"></i>
+
   </button>
 
   <button
     class="float-btn"
     onclick="resetFilters()"
   >
+
     <i class="fa-solid fa-rotate-right"></i>
+
   </button>
 
 </div>
 
-<!-- LEGEND -->
-
-<div class="legend">
-
-  <div
-    class="legend-title"
-    id="legendTitle"
-  >
-    Warna Kecamatan
-  </div>
-
-  <div id="legendItems"></div>
-
-</div>
-
-<!-- BOTTOM -->
+<!-- =========================================================
+BOTTOM SHEET
+========================================================= -->
 
 <div class="bottom-sheet">
 
-  <div class="bottom-sheet-header">
-
-    <div
-      class="sheet-title"
-      id="sheetTitle"
-    >
-      Belum ada wilayah dipilih
-    </div>
-
-    <button
-      class="toggle-sheet"
-      onclick="toggleSheet()"
-    >
-      <i
-        class="fa-solid fa-chevron-up"
-        id="toggleIcon"
-      ></i>
-    </button>
-
+  <div
+    class="sheet-title"
+    id="sheetTitle"
+  >
+    Belum ada wilayah dipilih
   </div>
 
-  <div
-    class="sheet-content"
-    id="sheetContent"
-  >
+  <div class="info-grid">
 
-    <div class="info-grid">
+    <div class="info-card">
 
-      <div class="info-card">
-
-        <div class="info-label">
-          IDSLS
-        </div>
-
-        <div
-          class="info-value"
-          id="idsls"
-        >
-          -
-        </div>
-
+      <div class="info-label">
+        IDSLS
       </div>
 
-      <div class="info-card">
-
-        <div class="info-label">
-          IDSUBSLS
-        </div>
-
-        <div
-          class="info-value"
-          id="idsubsls"
-        >
-          -
-        </div>
-
-      </div>
-
-      <div class="info-card">
-
-        <div class="info-label">
-          Kecamatan
-        </div>
-
-        <div
-          class="info-value"
-          id="kecamatan"
-        >
-          -
-        </div>
-
-      </div>
-
-      <div class="info-card">
-
-        <div class="info-label">
-          Kelurahan
-        </div>
-
-        <div
-          class="info-value"
-          id="kelurahan"
-        >
-          -
-        </div>
-
+      <div
+        class="info-value"
+        id="idsls"
+      >
+        -
       </div>
 
     </div>
 
-    <button
-      class="direction-btn"
-      onclick="navigateToPolygon()"
-    >
-      <i class="fa-solid fa-route"></i>
-      Arahkan Saya
-    </button>
+    <div class="info-card">
 
-    <div class="creator-card">
-      KLEPON-GO by yovie.wibowo
+      <div class="info-label">
+        Kecamatan
+      </div>
+
+      <div
+        class="info-value"
+        id="kecamatan"
+      >
+        -
+      </div>
+
+    </div>
+
+    <div class="info-card">
+
+      <div class="info-label">
+        Kelurahan
+      </div>
+
+      <div
+        class="info-value"
+        id="kelurahan"
+      >
+        -
+      </div>
+
+    </div>
+
+    <div class="info-card">
+
+      <div class="info-label">
+        PPL
+      </div>
+
+      <div
+        class="info-value"
+        id="ppl"
+      >
+        -
+      </div>
+
+    </div>
+
+    <div class="info-card">
+
+      <div class="info-label">
+        PML
+      </div>
+
+      <div
+        class="info-value"
+        id="pml"
+      >
+        -
+      </div>
+
     </div>
 
   </div>
 
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
 
-/* =========================
+/* =========================================================
 MAP
-========================= */
+========================================================= */
 
 const map = L.map('map',{
   zoomControl:false
@@ -1072,20 +917,19 @@ L.tileLayer(
   }
 ).addTo(map);
 
-/* =========================
+/* =========================================================
 VARIABLES
-========================= */
+========================================================= */
 
 let allData;
 let geojsonLayer;
-let selectedCenter = null;
 
 let userMarker = null;
-let currentHeading = 0;
-let currentArea = null;
 
 let currentUserLat = null;
 let currentUserLng = null;
+
+let currentArea = null;
 
 const palette = [
 
@@ -1096,22 +940,17 @@ const palette = [
   "#a569bd",
   "#58d68d",
   "#f5b041",
-  "#ec7063",
-  "#48c9b0",
-  "#af7ac5"
+  "#ec7063"
 
 ];
 
-const kecamatanColorMap = {};
-const kelurahanColorMap = {};
-
-/* =========================
+/* =========================================================
 PERSON ICON
-========================= */
+========================================================= */
 
 const personIcon = L.divIcon({
 
-  className:"",
+  className:'',
 
   html:`
 
@@ -1129,49 +968,49 @@ const personIcon = L.divIcon({
 
 });
 
-/* =========================
-SPLASH
-========================= */
+/* =========================================================
+LOADING BAR
+========================================================= */
 
 let progress = 0;
 
-const splashInterval = setInterval(() => {
+const loadingInterval = setInterval(()=>{
 
-  progress += 15;
+  progress += 10;
 
   if(progress > 100){
     progress = 100;
   }
 
   document
-    .getElementById("loadingBar")
-    .style.width = progress + "%";
+    .getElementById(
+      'loadingBar'
+    )
+    .style.width = progress + '%';
 
   document
-    .getElementById("loadingPercent")
-    .innerText = progress + "%";
+    .getElementById(
+      'loadingPercent'
+    )
+    .innerText = progress + '%';
 
   if(progress >= 100){
 
-    clearInterval(splashInterval);
-
-    setTimeout(() => {
-
-      document
-        .getElementById("splashScreen")
-        .style.display = "none";
-
-    },600);
+    clearInterval(
+      loadingInterval
+    );
 
   }
 
-},400);
+},150);
 
-/* =========================
+/* =========================================================
 LOAD GEOJSON
-========================= */
+========================================================= */
 
-fetch('final_subsls_6171_2025-1.geojson')
+fetch(
+  'final_subsls_6171_2025-1_se2026.geojson'
+)
 
 .then(res => res.json())
 
@@ -1187,11 +1026,255 @@ fetch('final_subsls_6171_2025-1.geojson')
 
   initializeGPS();
 
+  setTimeout(()=>{
+
+    document
+      .getElementById(
+        'splashScreen'
+      )
+      .style.display = 'none';
+
+  },1000);
+
 });
 
-/* =========================
-INITIALIZE GPS
-========================= */
+/* =========================================================
+RENDER
+========================================================= */
+
+function renderGeoJSON(features){
+
+  if(geojsonLayer){
+
+    map.removeLayer(
+      geojsonLayer
+    );
+
+  }
+
+  geojsonLayer = L.geoJSON(features,{
+
+    style:feature => ({
+
+      color:'#ffffff',
+
+      weight:1,
+
+      fillOpacity:0.55,
+
+      fillColor:
+        palette[
+          Math.floor(
+            Math.random() *
+            palette.length
+          )
+        ]
+
+    }),
+
+    onEachFeature:(feature,layer)=>{
+
+      layer.on('click',()=>{
+
+        selectPolygon(
+          feature,
+          layer
+        );
+
+      });
+
+    }
+
+  }).addTo(map);
+
+}
+
+/* =========================================================
+SELECT POLYGON
+========================================================= */
+
+function selectPolygon(feature,layer){
+
+  const props =
+    feature.properties;
+
+  document
+    .getElementById(
+      'sheetTitle'
+    )
+    .innerText =
+      props.nmsls || '-';
+
+  document
+    .getElementById(
+      'idsls'
+    )
+    .innerText =
+      props.idsls || '-';
+
+  document
+    .getElementById(
+      'kecamatan'
+    )
+    .innerText =
+      props.nmkec || '-';
+
+  document
+    .getElementById(
+      'kelurahan'
+    )
+    .innerText =
+      props.nmdesa || '-';
+
+  document
+    .getElementById(
+      'ppl'
+    )
+    .innerText =
+
+      props.namapencacah_se2026 || '-';
+
+  document
+    .getElementById(
+      'pml'
+    )
+    .innerText =
+
+      props.namapengawas_se2026 || '-';
+
+}
+
+/* =========================================================
+SEARCH
+========================================================= */
+
+function searchPolygon(){
+
+  const keyword =
+    document
+    .getElementById(
+      'searchInput'
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+  const type =
+    document
+    .getElementById(
+      'searchType'
+    )
+    .value;
+
+  if(!keyword)return;
+
+  const matchedLayers = [];
+
+  geojsonLayer.eachLayer(layer => {
+
+    const props =
+      layer.feature.properties;
+
+    let match = false;
+
+    if(type === 'idsls'){
+
+      match =
+
+        String(props.idsls)
+        .includes(keyword);
+
+    }
+
+    if(type === 'ppl'){
+
+      match =
+
+        String(
+          props.namapencacah_se2026
+        )
+        .toLowerCase()
+        .includes(keyword);
+
+    }
+
+    if(type === 'pml'){
+
+      match =
+
+        String(
+          props.namapengawas_se2026
+        )
+        .toLowerCase()
+        .includes(keyword);
+
+    }
+
+    if(match){
+
+      matchedLayers.push(layer);
+
+      layer.setStyle({
+
+        color:'#ffffff',
+
+        weight:4,
+
+        fillOpacity:0.95
+
+      });
+
+      if(layer._path){
+
+        layer._path.classList
+        .add('search-highlight');
+
+      }
+
+    }
+
+    else{
+
+      layer.setStyle({
+
+        fillOpacity:0.08,
+
+        opacity:0.2
+
+      });
+
+      if(layer._path){
+
+        layer._path.classList
+        .remove('search-highlight');
+
+      }
+
+    }
+
+  });
+
+  if(matchedLayers.length){
+
+    const group =
+      L.featureGroup(
+        matchedLayers
+      );
+
+    map.fitBounds(
+      group.getBounds(),
+      {
+        padding:[40,40]
+      }
+    );
+
+  }
+
+}
+
+/* =========================================================
+GPS
+========================================================= */
 
 function initializeGPS(){
 
@@ -1205,18 +1288,8 @@ function initializeGPS(){
       const lng =
         position.coords.longitude;
 
-      const heading =
-        position.coords.heading;
-
       currentUserLat = lat;
       currentUserLng = lng;
-
-      if(heading !== null){
-
-        currentHeading =
-          heading;
-
-      }
 
       if(!userMarker){
 
@@ -1241,22 +1314,6 @@ function initializeGPS(){
 
       }
 
-      setTimeout(() => {
-
-        const markerEl =
-          document.getElementById(
-            "personMarker"
-          );
-
-        if(markerEl){
-
-          markerEl.style.transform =
-            `rotate(${currentHeading}deg)`;
-
-        }
-
-      },50);
-
       detectCurrentPolygon(
         lat,
         lng
@@ -1272,11 +1329,7 @@ function initializeGPS(){
 
     {
 
-      enableHighAccuracy:true,
-
-      maximumAge:0,
-
-      timeout:5000
+      enableHighAccuracy:true
 
     }
 
@@ -1284,9 +1337,9 @@ function initializeGPS(){
 
 }
 
-/* =========================
+/* =========================================================
 RECENTER USER
-========================= */
+========================================================= */
 
 function recenterUser(){
 
@@ -1314,482 +1367,9 @@ function recenterUser(){
 
 }
 
-/* =========================
-COLOR
-========================= */
-
-function getColor(mapObj,key){
-
-  if(!mapObj[key]){
-
-    const index =
-      Object.keys(mapObj).length
-      % palette.length;
-
-    mapObj[key] =
-      palette[index];
-
-  }
-
-  return mapObj[key];
-
-}
-
-/* =========================
-RENDER
-========================= */
-
-function renderGeoJSON(features){
-
-  if(geojsonLayer){
-
-    map.removeLayer(geojsonLayer);
-
-  }
-
-  const selectedKec =
-    document
-    .getElementById("kecamatanFilter")
-    .value;
-
-  const selectedKel =
-    document
-    .getElementById("kelurahanFilter")
-    .value;
-
-  geojsonLayer = L.geoJSON(features,{
-
-    style:feature => {
-
-      const props =
-        feature.properties;
-
-      let fill;
-
-      if(!selectedKec){
-
-        fill =
-          getColor(
-            kecamatanColorMap,
-            props.nmkec
-          );
-
-      }
-
-      else{
-
-        fill =
-          getColor(
-            kelurahanColorMap,
-            props.nmdesa
-          );
-
-      }
-
-      return{
-
-        color:"#ffffff",
-
-        weight:1,
-
-        fillColor:fill,
-
-        fillOpacity:0.55
-
-      };
-
-    },
-
-    onEachFeature:(feature,layer)=>{
-
-      layer.on('click',()=>{
-
-        selectPolygon(
-          feature,
-          layer
-        );
-
-      });
-
-      if(selectedKel){
-
-        layer.bindTooltip(
-
-          feature.properties.nmsls || "-",
-
-          {
-            permanent:true,
-            direction:"center",
-            className:"polygon-label"
-          }
-
-        );
-
-      }
-
-    }
-
-  }).addTo(map);
-
-  updateLegend(features);
-
-}
-
-/* =========================
-SELECT POLYGON
-========================= */
-
-function selectPolygon(feature,layer){
-
-  const props =
-    feature.properties;
-
-  document
-    .getElementById("sheetTitle")
-    .innerText =
-      props.nmsls || "-";
-
-  document
-    .getElementById("idsls")
-    .innerText =
-      props.idsls || "-";
-
-  document
-    .getElementById("idsubsls")
-    .innerText =
-      props.idsubsls || "-";
-
-  document
-    .getElementById("kecamatan")
-    .innerText =
-      props.nmkec || "-";
-
-  document
-    .getElementById("kelurahan")
-    .innerText =
-      props.nmdesa || "-";
-
-  selectedCenter =
-    layer.getBounds().getCenter();
-
-}
-
-/* =========================
-SEARCH
-========================= */
-
-function searchPolygon(){
-
-  const keyword =
-    document
-    .getElementById("searchInput")
-    .value
-    .trim();
-
-  if(!keyword){
-
-    alert(
-      "Masukkan IDSLS atau IDSUBSLS"
-    );
-
-    return;
-
-  }
-
-  let found = false;
-
-  geojsonLayer.eachLayer(layer => {
-
-    const props =
-      layer.feature.properties;
-
-    const idsls =
-      String(props.idsls || "");
-
-    const idsubsls =
-      String(props.idsubsls || "");
-
-    layer.setStyle({
-
-      weight:1,
-      opacity:1,
-      fillOpacity:0.18
-
-    });
-
-    if(layer._path){
-
-      layer._path.classList
-      .remove("search-highlight");
-
-    }
-
-    if(
-
-      idsls === keyword ||
-      idsubsls === keyword
-
-    ){
-
-      found = true;
-
-      layer.setStyle({
-
-        color:"#ffffff",
-
-        weight:4,
-
-        fillOpacity:0.95,
-
-        opacity:1
-
-      });
-
-      layer.bringToFront();
-
-      if(layer._path){
-
-        layer._path.classList
-        .add("search-highlight");
-
-      }
-
-      selectPolygon(
-        layer.feature,
-        layer
-      );
-
-      map.fitBounds(
-        layer.getBounds(),
-        {
-          padding:[40,40]
-        }
-      );
-
-    }
-
-    else{
-
-      layer.setStyle({
-
-        fillOpacity:0.08,
-
-        opacity:0.25
-
-      });
-
-    }
-
-  });
-
-  if(!found){
-
-    alert(
-      "Polygon tidak ditemukan"
-    );
-
-  }
-
-}
-
-/* =========================
-SORT KECAMATAN
-========================= */
-
-function populateKecamatan(){
-
-  const temp = [];
-
-  allData.features.forEach(f => {
-
-    temp.push({
-
-      kode:f.properties.kdkec,
-
-      nama:f.properties.nmkec
-
-    });
-
-  });
-
-  const unique =
-    [...new Map(
-      temp.map(item => [
-        item.kode,
-        item
-      ])
-    ).values()];
-
-  unique.sort((a,b)=>
-
-    a.kode.localeCompare(b.kode)
-
-  );
-
-  const select =
-    document
-    .getElementById("kecamatanFilter");
-
-  unique.forEach(item => {
-
-    const option =
-      document.createElement("option");
-
-    option.value =
-      item.nama;
-
-    option.textContent =
-      item.nama;
-
-    select.appendChild(option);
-
-  });
-
-}
-
-/* =========================
-FILTER KEC
-========================= */
-
-document
-.getElementById("kecamatanFilter")
-.addEventListener("change",function(){
-
-  const kecamatan =
-    this.value;
-
-  Object.keys(kelurahanColorMap)
-  .forEach(key => {
-
-    delete kelurahanColorMap[key];
-
-  });
-
-  const kelSelect =
-    document
-    .getElementById("kelurahanFilter");
-
-  kelSelect.innerHTML = `
-    <option value="">
-      Semua Kelurahan
-    </option>
-  `;
-
-  if(!kecamatan){
-
-    renderGeoJSON(
-      allData.features
-    );
-
-    map.setView(
-      [-0.0263,109.3425],
-      12
-    );
-
-    return;
-
-  }
-
-  const filtered =
-    allData.features.filter(f =>
-
-      f.properties.nmkec === kecamatan
-
-    );
-
-  renderGeoJSON(filtered);
-
-  const temp = [];
-
-  filtered.forEach(f => {
-
-    temp.push({
-
-      kode:f.properties.kddesa,
-
-      nama:f.properties.nmdesa
-
-    });
-
-  });
-
-  const unique =
-    [...new Map(
-      temp.map(item => [
-        item.kode,
-        item
-      ])
-    ).values()];
-
-  unique.sort((a,b)=>
-
-    a.kode.localeCompare(b.kode)
-
-  );
-
-  unique.forEach(item => {
-
-    const option =
-      document.createElement("option");
-
-    option.value =
-      item.nama;
-
-    option.textContent =
-      item.nama;
-
-    kelSelect.appendChild(option);
-
-  });
-
-});
-
-/* =========================
-FILTER KEL
-========================= */
-
-document
-.getElementById("kelurahanFilter")
-.addEventListener("change",function(){
-
-  const kecamatan =
-    document
-    .getElementById("kecamatanFilter")
-    .value;
-
-  const kelurahan =
-    this.value;
-
-  if(!kelurahan){
-
-    const filtered =
-      allData.features.filter(f =>
-
-        f.properties.nmkec === kecamatan
-
-      );
-
-    renderGeoJSON(filtered);
-
-    return;
-
-  }
-
-  const filtered =
-    allData.features.filter(f =>
-
-      f.properties.nmkec === kecamatan &&
-      f.properties.nmdesa === kelurahan
-
-    );
-
-  renderGeoJSON(filtered);
-
-});
-
-/* =========================
-DETECT POLYGON
-========================= */
+/* =========================================================
+DETECT CURRENT POLYGON
+========================================================= */
 
 function detectCurrentPolygon(lat,lng){
 
@@ -1810,7 +1390,7 @@ function detectCurrentPolygon(lat,lng){
         feature.properties;
 
       const areaName =
-        props.nmsls || "-";
+        props.nmsls || '-';
 
       if(currentArea !== areaName){
 
@@ -1819,9 +1399,9 @@ function detectCurrentPolygon(lat,lng){
 
         showAreaPopup(
 
-          props.nmsls || "-",
+          props.nmsls || '-',
 
-          props.nmdesa || "-"
+          props.namapencacah_se2026 || '-'
 
         );
 
@@ -1835,141 +1415,141 @@ function detectCurrentPolygon(lat,lng){
 
 }
 
-/* =========================
-SHOW AREA POPUP
-========================= */
+/* =========================================================
+AREA POPUP
+========================================================= */
 
 function showAreaPopup(title,desc){
 
   const popup =
-    document.getElementById(
-      "areaPopup"
+    document
+    .getElementById(
+      'areaPopup'
     );
 
   document
     .getElementById(
-      "areaPopupTitle"
+      'areaPopupTitle'
     )
     .innerText = title;
 
   document
     .getElementById(
-      "areaPopupDesc"
+      'areaPopupDesc'
     )
-    .innerText = desc;
+    .innerText =
 
-  popup.classList.add("show");
+      'PPL : ' + desc;
 
-  setTimeout(() => {
+  popup.classList.add(
+    'show'
+  );
 
-    popup.classList.remove("show");
+  setTimeout(()=>{
+
+    popup.classList.remove(
+      'show'
+    );
 
   },3000);
 
 }
 
-/* =========================
-LEGEND
-========================= */
+/* =========================================================
+FILTER KECAMATAN
+========================================================= */
 
-function updateLegend(features){
+function populateKecamatan(){
 
-  const selectedKec =
+  const unique =
+    [...new Set(
+
+      allData.features.map(f =>
+
+        f.properties.nmkec
+
+      )
+
+    )];
+
+  const select =
     document
-    .getElementById("kecamatanFilter")
-    .value;
+    .getElementById(
+      'kecamatanFilter'
+    );
 
-  const legend =
-    document
-    .getElementById("legendItems");
+  unique.forEach(item => {
 
-  legend.innerHTML = "";
+    const option =
+      document.createElement(
+        'option'
+      );
 
-  const unique = {};
+    option.value = item;
+    option.textContent = item;
 
-  features.forEach(f => {
-
-    const props =
-      f.properties;
-
-    let key;
-    let color;
-
-    if(!selectedKec){
-
-      key = props.nmkec;
-
-      color =
-        getColor(
-          kecamatanColorMap,
-          props.nmkec
-        );
-
-    }
-
-    else{
-
-      key = props.nmdesa;
-
-      color =
-        getColor(
-          kelurahanColorMap,
-          props.nmdesa
-        );
-
-    }
-
-    unique[key] = color;
-
-  });
-
-  Object.entries(unique)
-  .forEach(([name,color]) => {
-
-    const div =
-      document.createElement("div");
-
-    div.className =
-      "legend-item";
-
-    div.innerHTML = `
-
-      <div
-        class="legend-color"
-        style="background:${color}"
-      ></div>
-
-      <span>${name}</span>
-
-    `;
-
-    legend.appendChild(div);
+    select.appendChild(
+      option
+    );
 
   });
 
 }
 
-/* =========================
+/* =========================================================
+FILTER CHANGE
+========================================================= */
+
+document
+.getElementById(
+  'kecamatanFilter'
+)
+.addEventListener(
+  'change',
+  function(){
+
+    const kecamatan =
+      this.value;
+
+    if(!kecamatan){
+
+      renderGeoJSON(
+        allData.features
+      );
+
+      return;
+
+    }
+
+    const filtered =
+      allData.features.filter(f =>
+
+        f.properties.nmkec === kecamatan
+
+      );
+
+    renderGeoJSON(filtered);
+
+  }
+);
+
+/* =========================================================
 RESET
-========================= */
+========================================================= */
 
 function resetFilters(){
 
   document
-    .getElementById("kecamatanFilter")
-    .value = "";
+    .getElementById(
+      'searchInput'
+    )
+    .value = '';
 
   document
-    .getElementById("kelurahanFilter")
-    .innerHTML = `
-      <option value="">
-        Semua Kelurahan
-      </option>
-    `;
-
-  document
-    .getElementById("searchInput")
-    .value = "";
+    .getElementById(
+      'kecamatanFilter'
+    )
+    .value = '';
 
   renderGeoJSON(
     allData.features
@@ -1982,71 +1562,8 @@ function resetFilters(){
 
 }
 
-/* =========================
-NAVIGATE
-========================= */
-
-function navigateToPolygon(){
-
-  if(!selectedCenter){
-
-    alert(
-      "Pilih polygon terlebih dahulu"
-    );
-
-    return;
-
-  }
-
-  const lat =
-    selectedCenter.lat;
-
-  const lng =
-    selectedCenter.lng;
-
-  window.open(
-
-    `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
-
-    "_blank"
-
-  );
-
-}
-
-/* =========================
-TOGGLE SHEET
-========================= */
-
-function toggleSheet(){
-
-  const content =
-    document
-    .getElementById("sheetContent");
-
-  const icon =
-    document
-    .getElementById("toggleIcon");
-
-  content.classList.toggle("hide");
-
-  if(content.classList.contains("hide")){
-
-    icon.className =
-      "fa-solid fa-chevron-down";
-
-  }
-
-  else{
-
-    icon.className =
-      "fa-solid fa-chevron-up";
-
-  }
-
-}
-
 </script>
 
 </body>
 </html>
+```
